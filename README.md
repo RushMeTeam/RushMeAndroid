@@ -1,2 +1,2 @@
 # RushMeAndroid
-Front end for the RushMe Android App
+The RushMe App Android Frontend
