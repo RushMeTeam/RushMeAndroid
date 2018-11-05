@@ -28,6 +28,7 @@ LinearLayout parent;
 
         parent = (LinearLayout)findViewById(R.id.fraternityView);
 
+        //Filling a temporary array for the sake of testing the app's offline fuctionality.
         for(int i=0; i<100; i++){
             btn = new Button(MainActivity.this);
             btn.setHeight(300);
