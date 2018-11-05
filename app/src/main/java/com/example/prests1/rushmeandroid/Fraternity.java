@@ -9,6 +9,8 @@ public class Fraternity {
     private String chapter;
     private int memberCount;
     private String desc;
+    private String imgURL;
+    private String calendarURL;
 
     //Constructor sets variables as these need only be determined on start/require no local update.
     public Fraternity(String fraternityName, String fraternityChapter, int fraternityMembers, String fraternityDecription) {
@@ -33,6 +35,14 @@ public class Fraternity {
 
     public String getDescription() {
         return this.desc;
+    }
+
+    public String getImage() {
+        return this.imgURL;
+    }
+
+    public String getCalendar() {
+        return this.calendarURL;
     }
 
     //Temporary function established to verify info. (Functionality test)
