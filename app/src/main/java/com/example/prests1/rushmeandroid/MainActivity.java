@@ -48,7 +48,7 @@ LinearLayout parent;
 
     }
 
-    public void openFraternityProfile(){
+    public void openFraternityProfile() {
         Intent intent = new Intent(this, FraternityProfile.class);
         intent.putExtra("name", frat1.getName());
         startActivity(intent);
