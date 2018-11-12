@@ -21,21 +21,11 @@ public class Fraternity {
     }
 
     //Getters for info that is displayed.
-    public String getName() {
-        return this.name;
-    }
-    public String getChapter() {
-        return this.chapter;
-    }
-    public int getMemberCount() {
-        return this.memberCount;
-    }
-    public String getDescription() {
-        return this.desc;
-    }
-    public String getImage() {
-        return this.imgURL;
-    }
+    public String getName() { return this.name; }
+    public String getChapter() { return this.chapter; }
+    public int getMemberCount() { return this.memberCount; }
+    public String getDescription() { return this.desc; }
+    public String getImage() { return this.imgURL; }
     public String getCalendar() { return this.calendarURL; }
 
     //Temporary function established to verify info. (Functionality test)
