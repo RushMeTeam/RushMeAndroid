@@ -13,11 +13,13 @@ public class Fraternity {
     private String calendarURL;
 
     //Constructor sets variables as these need only be determined on start/require no local update.
-    public Fraternity(String fraternityName, String fraternityChapter, int fraternityMembers, String fraternityDecription) {
+    public Fraternity(String fraternityName, String fraternityChapter, int fraternityMembers, String fraternityDecription, String img, String cal) {
         this.name = fraternityName;
         this.chapter = fraternityChapter;
         this.memberCount = fraternityMembers;
         this.desc = fraternityDecription;
+        this.imgURL = img;
+        this.calendarURL = cal;
     }
 
     //Getters for info that is displayed.
