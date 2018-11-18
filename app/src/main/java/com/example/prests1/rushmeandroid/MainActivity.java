@@ -26,6 +26,11 @@ LinearLayout parent;
 
         parent = (LinearLayout)findViewById(R.id.fraternityView);
 
+        /* Code needed in loop to implement images.
+         * new DownloadImageTask((ImageView) findViewById(R.id.imageView1))
+         * .execute(MY_URL_STRING);
+         */
+
         //Filling a temporary array for the sake of testing the app's offline fuctionality.
         for(int i=0; i<100; i++){
             btn = new Button(MainActivity.this);
