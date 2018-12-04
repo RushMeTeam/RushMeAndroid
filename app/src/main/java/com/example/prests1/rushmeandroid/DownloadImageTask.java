@@ -1,5 +1,14 @@
 package com.example.prests1.rushmeandroid;
 
+/*
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageView;
+
+import java.io.InputStream;
+
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     ImageView bmImage;
 
@@ -24,3 +33,4 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         bmImage.setImageBitmap(result);
     }
 }
+*/
