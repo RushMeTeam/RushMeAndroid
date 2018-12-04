@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity{
 LinearLayout parent;
@@ -28,6 +26,12 @@ LinearLayout parent;
 
         parent = (LinearLayout)findViewById(R.id.fraternityView);
 
+        /* Code needed in loop to implement images.
+         * new DownloadImageTask((ImageView) findViewById(R.id.imageView1))
+         * .execute(MY_URL_STRING);
+         */
+
+        //Filling a temporary array for the sake of testing the app's offline fuctionality.
         for(int i=0; i<100; i++){
             btn = new Button(MainActivity.this);
             btn.setHeight(300);
@@ -47,7 +51,7 @@ LinearLayout parent;
 
     }
 
-    public void openFraternityProfile(){
+    public void openFraternityProfile() {
         Intent intent = new Intent(this, FraternityProfile.class);
         intent.putExtra("fraternity", frat1.getName());
         intent.putExtra("chapter", frat1.getName());
