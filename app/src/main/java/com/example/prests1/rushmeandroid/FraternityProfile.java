@@ -12,16 +12,37 @@ public class FraternityProfile extends AppCompatActivity {
         setContentView(R.layout.activity_fraternity_profile);
 
         String fraternityName;
+        String chapterName;
+        int memberCount;
+        String description;
         if(savedInstanceState == null){
             Bundle extras = getIntent().getExtras();
             if(extras==null){
                 fraternityName = null;
+                chapterName = null;
+                memberCount = 0;
+                description = null;
             } else {
-                fraternityName = extras.getString("name");
+                fraternityName = extras.getString("fraternity");
+                chapterName = extras.getString("chapter");
+                description = extras.getString("description");
+                memberCount = extras.getInt("memberCount");
             }
         } else {
-            fraternityName = (String) savedInstanceState.getSerializable("name");
+            fraternityName = (String) savedInstanceState.getSerializable("fraternity");
+            chapterName = (String) savedInstanceState.getSerializable("chapter");
+            memberCount = (int) savedInstanceState.getSerializable("memberCount");
+            description = (String) savedInstanceState.getSerializable("description");
         }
+
+        TextView chapterView = (TextView) findViewById(R.id.chapter);
+        chapterView.setText(chapterName);
+
+        TextView memberCountView = (TextView) findViewById(R.id.memberCount);
+        memberCountView.setText("" + memberCount);
+
+        TextView descriptionView = (TextView) findViewById(R.id.description);
+        descriptionView.setText(description);
 
         setTitle(fraternityName);
 
