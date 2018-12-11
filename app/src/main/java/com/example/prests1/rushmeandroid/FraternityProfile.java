@@ -2,7 +2,10 @@ package com.example.prests1.rushmeandroid;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 public class FraternityProfile extends AppCompatActivity {
     TextView name;
@@ -45,6 +48,12 @@ public class FraternityProfile extends AppCompatActivity {
         descriptionView.setText(description);
 
         setTitle(fraternityName);
+
+        ImageView chapterImage = (ImageView) findViewById(R.id.chapterImage);
+
+        Glide.with(context)
+                .load("http://via.placeholder.com/300.png")
+                .into(chapterImage);
 
     }
 }
