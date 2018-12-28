@@ -20,9 +20,11 @@ LinearLayout parent;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.mipmap.ic_launcher);
+        */
 
         parent = (LinearLayout)findViewById(R.id.fraternityView);
 
@@ -49,6 +51,14 @@ LinearLayout parent;
 
         fraternities = (ScrollView)findViewById(R.id.fraternities);
 
+        Button calendarBtn = (Button) findViewById(R.id.calendarBtn);
+        calendarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCalendar();
+            }
+        });
+
     }
 
     public void openFraternityProfile() {
@@ -58,5 +68,9 @@ LinearLayout parent;
         intent.putExtra("memberCount", frat1.getMemberCount());
         intent.putExtra("description", frat1.getDescription());
         startActivity(intent);
+    }
+
+    public void openCalendar() {
+        startActivity(new Intent(this, calendar.class));
     }
 }

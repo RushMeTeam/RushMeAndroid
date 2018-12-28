@@ -51,9 +51,10 @@ public class FraternityProfile extends AppCompatActivity {
 
         ImageView chapterImage = (ImageView) findViewById(R.id.chapterImage);
 
+        /*
         Glide.with(context)
                 .load("http://via.placeholder.com/300.png")
                 .into(chapterImage);
-
+        */
     }
 }
