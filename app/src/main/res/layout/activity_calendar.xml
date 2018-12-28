@@ -7,6 +7,7 @@
     tools:context=".calendar">
 
     <LinearLayout
+        android:id="@+id/calendarView"
         android:layout_width="300dp"
         android:layout_height="wrap_content">
         <CalendarView
