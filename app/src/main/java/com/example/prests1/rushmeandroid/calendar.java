@@ -29,6 +29,9 @@ public class calendar extends AppCompatActivity {
         parent = (LinearLayout) findViewById(R.id.calendarView);
 
         CalendarView rushCalendar = (CalendarView) findViewById(R.id.rushCalendar);
+        /**
+         * Clickable Dates **Not Working**
+         */
         rushCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -42,6 +45,9 @@ public class calendar extends AppCompatActivity {
 
         String rushStartStr = "01-01-2019";
         String rushEndStr = "28-02-2019";
+        /**
+         * Set date bounds
+         */
         try{
             Date rushStartDate = formatter.parse(rushStartStr);
             rushCalendar.setMinDate(rushStartDate.getTime());

@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FraternityProfile" />
-        <activity android:name=".calendar"></activity>
+        <activity android:name=".calendar" />
+        <activity android:name=".map"></activity>
     </application>
 
 </manifest>
