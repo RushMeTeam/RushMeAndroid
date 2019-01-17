@@ -3,6 +3,7 @@ package com.example.prests1.rushmeandroid;
 import java.util.Calendar;
 import java.util.Date;
 
+
 // This class determines the structure of the 'Fraternity' object.
 public class Fraternity {
 
