@@ -4,20 +4,33 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
@@ -28,6 +41,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ProgressDialog pd;
@@ -36,6 +50,77 @@ public class MainActivity extends AppCompatActivity {
     HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>();
     HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
     ArrayList<Fraternity.Event> events;
+
+    protected void log(String action, String options) {
+        new LogAction().execute(action, options);
+    }
+    public class LogAction extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String urlString = "http://ec2-18-188-8-243.us-east-2.compute.amazonaws.com/request.php";
+            OutputStream out = null;
+
+            try {
+                URL url = new URL(urlString);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                out = new BufferedOutputStream(urlConnection.getOutputStream());
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                // duuid // rtime // dtype // dsoft // appv
+                nameValuePairs.add(new BasicNameValuePair("duuid", Settings.Secure.ANDROID_ID));
+                String SQLDateFormat = "yyyy-MM-dd HH:mm:ss.SSSZ";
+                DateFormat sqlDF = new SimpleDateFormat(SQLDateFormat);
+                String now = sqlDF.format(new Date());
+
+                nameValuePairs.add(new BasicNameValuePair("pact", params[0]));
+                nameValuePairs.add(new BasicNameValuePair("popt", params[1]));
+                nameValuePairs.add(new BasicNameValuePair("rtime", now));
+                nameValuePairs.add(new BasicNameValuePair("dtype", android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL));
+
+                nameValuePairs.add(new BasicNameValuePair("dsoft", android.os.Build.VERSION.RELEASE));
+                nameValuePairs.add(new BasicNameValuePair("appv", "0001"));
+                new UrlEncodedFormEntity(nameValuePairs).writeTo(out);
+//                Log.d("WOW", done);
+//                // Execute HTTP Post Request
+//                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+//                writer.write(done);
+//                writer.flush();
+//                writer.close();
+                out.close();
+                String response = "";
+                urlConnection.connect();
+                int responseCode=urlConnection.getResponseCode();
+                Log.d("GETTING POST RESPONSE", "!");
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    int i = 0;
+                    while ((line=br.readLine()) != null && i < 10) {
+                        response+=line;
+                        Log.e("LINE " + i, line);
+                        i++;
+                    }
+                }
+                else {
+                    response="";
+                }
+                Log.e("RECEIVED POST RESPONSE", response);
+            } catch (Exception e) {
+                Log.e("LOG FAILED", e.getMessage());
+            }
+            return "Success";
+
+        }
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
          * Call for All fraternityScrollView
          */
         new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
-
+        log("APP DID LOAD", "");
         /**
          * Generate a bunch of clickables for fraternityScrollView
          */
@@ -149,6 +234,8 @@ public class MainActivity extends AppCompatActivity {
     public void openMap() {
         startActivity(new Intent(this, map.class));
     }
+
+
 
     /**
      * Json Array from URL
