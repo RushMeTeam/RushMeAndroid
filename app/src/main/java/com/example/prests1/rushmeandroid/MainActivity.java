@@ -8,6 +8,8 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -168,13 +170,13 @@ public class MainActivity extends AppCompatActivity {
 //        /**
 //         * Generate Map clickable
 //         */
-//        Button mapBtn = (Button) findViewById(R.id.btnMap);
-//        mapBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMap();
-//            }
-//        });
+          Button mapBtn = (Button) findViewById(R.id.btnMap);
+          mapBtn.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  openMap();
+              }
+          });
     }
 
     static String get(String sURL) throws Exception {
@@ -232,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
      * move to map activity
      */
     public void openMap() {
-        startActivity(new Intent(this, map.class));
+        startActivity(new Intent(this, Events.class));
     }
 
 
