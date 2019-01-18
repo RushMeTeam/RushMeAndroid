@@ -234,7 +234,18 @@ public class MainActivity extends AppCompatActivity {
      * move to map activity
      */
     public void openMap() {
-        startActivity(new Intent(this, Events.class));
+        ArrayList<Fraternity.Event> clone = new ArrayList<Fraternity.Event>();
+        Log.d("EVENTSIZE", Integer.toString(events.size()));
+        for(int i=0; i<10; ++i){
+            Log.d("MAINEVENT", events.get(i).name);
+            clone.add(events.get(i));
+        }
+        
+        Intent intent = new Intent(this, Events.class);
+        Bundle b = new Bundle();
+        //b.putParcelableArrayList("events", events);
+        intent.putExtra("events", clone);
+        startActivity(intent);
     }
 
 
