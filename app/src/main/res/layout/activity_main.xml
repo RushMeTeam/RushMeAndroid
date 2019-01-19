@@ -6,7 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ScrollView
+    <!--<ScrollView-->
+        <!--android:id="@+id/fraternities"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/guideline2"-->
+        <!--app:layout_constraintVertical_bias="0.0">-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/fraternityView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fraternities"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -17,14 +37,14 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout
-            android:id="@+id/fraternityView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-        </LinearLayout>
-    </ScrollView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fraternitiesRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
+
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"

@@ -7,11 +7,15 @@ import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -45,13 +49,23 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener {
     ProgressDialog pd;
     LinearLayout parent;
-    ScrollView fraternityScrollView;
+    CardView fraternityScrollView;
     HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>();
     HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
     ArrayList<Fraternity.Event> events;
+
+    MyRecyclerViewAdapter adapter;
+
+
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
 
     protected void log(String action, String options) {
         new LogAction().execute(action, options);
@@ -129,33 +143,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        parent = (LinearLayout) findViewById(R.id.fraternityView);
+//        parent = (LinearLayout) findViewById(R.id.fraternitiesRV);
 
-        /**
-         * Call for All fraternityScrollView
-         */
         new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
         log("APP DID LOAD", "");
-        /**
-         * Generate a bunch of clickables for fraternityScrollView
-         */
-//        for (int i = 0; i < 100; i++) {
-//            btn = new Button(MainActivity.this);
-//            btn.setHeight(300);
-//            btn.setId(i + 1);
-//            btn.setText(frat1.getName());
-//            btn.setTag(i);
-//            btn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    openFraternityProfile();
-//                }
-//            });
-//            parent.addView(btn);
-//        }
 
-        fraternityScrollView = (ScrollView) findViewById(R.id.fraternities);
+        // set up the RecyclerView
+        RecyclerView recyclerView = findViewById(R.id.fraternitiesRV);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        adapter = new MyRecyclerViewAdapter(this, events);
+        adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
 //        /**
 //         * Generate Calendar clickable
 //         */
@@ -249,7 +248,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    protected void reloadData() {
+        adapter.updateData(events);
+    }
     /**
      * Json Array from URL
      */
@@ -300,8 +301,8 @@ public class MainActivity extends AppCompatActivity {
                         String fratKey = eventJSON.getString("frat_name_key");
                         String startTime = eventJSON.getString("start_time");
                         DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                        Date starting = (Date) df1.parse(startTime);
-                        String inviteOnly = eventJSON.getString("invite_only");
+                        Date starting = df1.parse(startTime);
+//                        String inviteOnly = eventJSON.getString("invite_only");
                         String location = eventJSON.getString("location");
                         Fraternity frat = fraternitiesByKey.get(fratKey);
                         // String name,  String location, Fraternity frat, Date starting, Integer durationInMinutes
@@ -330,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
             if (pd.isShowing()){
                 pd.dismiss();
             }
-
+            reloadData();
         }
     }
 
