@@ -1,7 +1,10 @@
 package com.example.prests1.rushmeandroid;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements EventRecyclerViewAdapter.ItemClickListener {
     ProgressDialog pd;
@@ -54,7 +59,20 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
-
+    private String getUUID() {
+        String key = "uuid";
+        String fileKey = "shared";
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                fileKey, Context.MODE_PRIVATE);
+        String uuid = sharedPref.getString(key, null);
+        if (uuid == null) {
+            uuid =  UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(key,uuid);
+            editor.apply();
+        }
+        return uuid;
+    }
     protected void log(String action, String options) {
         new LogAction().execute(action, options);
     }
@@ -78,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 // duuid // rtime // dtype // dsoft // appv
-                nameValuePairs.add(new BasicNameValuePair("duuid", Settings.Secure.ANDROID_ID));
+                nameValuePairs.add(new BasicNameValuePair("duuid", getUUID()));
                 String SQLDateFormat = "yyyy-MM-dd HH:mm:ss.SSSZ";
                 DateFormat sqlDF = new SimpleDateFormat(SQLDateFormat);
                 String now = sqlDF.format(new Date());
@@ -89,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
                 nameValuePairs.add(new BasicNameValuePair("dtype", android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL));
 
                 nameValuePairs.add(new BasicNameValuePair("dsoft", android.os.Build.VERSION.RELEASE));
-                nameValuePairs.add(new BasicNameValuePair("appv", "0001"));
+                PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                String version = pInfo.versionName + "-" + pInfo.getLongVersionCode();
+                nameValuePairs.add(new BasicNameValuePair("appv", version));
                 new UrlEncodedFormEntity(nameValuePairs).writeTo(out);
 //                Log.d("WOW", done);
 //                // Execute HTTP Post Request
