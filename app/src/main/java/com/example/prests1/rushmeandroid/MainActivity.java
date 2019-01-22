@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
 //        parent = (LinearLayout) findViewById(R.id.fraternitiesRV);
 
         new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
-        log("APP DID LOAD", "");
+        log("App Entered Foreground", "");
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.fraternitiesRV);
