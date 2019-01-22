@@ -8,8 +8,8 @@ RushMe has been implemented successfully at Rensselaer Polytechnic Institute. Th
 # Screenshots
 None yet!
 
-# Supported Devices
-Initial development is supporting Android 9 (API level 28) for Nexus 5.
+# Supported Platforms
+RushMe Android supports Android 9 (API level 28) and beyond, and is tested on the Nexus 5.
 
 # Contribute to RushMe
 The team welcomes contributions to RushMe. To contribute fork the repository, make (and document!) some changes and submit a pull request for us to look over. Approved changes will be included in the next release.
