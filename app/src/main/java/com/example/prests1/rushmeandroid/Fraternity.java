@@ -2,6 +2,7 @@ package com.example.prests1.rushmeandroid;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateUtils;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -58,8 +59,10 @@ public class Fraternity implements  Serializable{
             this.location = location;
             this.frat = frat;
             this.starting = starting;
-
-            this.ending = starting;
+            Calendar cal = Calendar.getInstance(); // creates calendar
+            cal.setTime(starting); // sets calendar time/date
+            cal.add(Calendar.MINUTE, durationInMinutes); // adds one hour
+            this.ending = cal.getTime(); // returns new date object, n hours in the future
         }
 
         /*
