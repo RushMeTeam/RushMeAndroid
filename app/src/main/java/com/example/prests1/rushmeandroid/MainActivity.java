@@ -1,6 +1,5 @@
 package com.example.prests1.rushmeandroid;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,16 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,25 +24,20 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener {
+public class MainActivity extends AppCompatActivity implements EventRecyclerViewAdapter.ItemClickListener {
     ProgressDialog pd;
     LinearLayout parent;
     CardView fraternityScrollView;
@@ -57,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
     ArrayList<Fraternity.Event> events;
 
-    MyRecyclerViewAdapter adapter;
+    EventRecyclerViewAdapter adapter;
 
 
 
@@ -152,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         RecyclerView recyclerView = findViewById(R.id.fraternitiesRV);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new MyRecyclerViewAdapter(this, events);
+        adapter = new EventRecyclerViewAdapter(this, events);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 //        /**
@@ -169,13 +157,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 //        /**
 //         * Generate Map clickable
 //         */
-          Button mapBtn = (Button) findViewById(R.id.btnMap);
-          mapBtn.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                  openMap();
-              }
-          });
     }
 
     static String get(String sURL) throws Exception {
@@ -305,9 +286,11 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 //                        String inviteOnly = eventJSON.getString("invite_only");
                         String location = eventJSON.getString("location");
                         Fraternity frat = fraternitiesByKey.get(fratKey);
-                        // String name,  String location, Fraternity frat, Date starting, Integer durationInMinutes
-                        Fraternity.Event event = new Fraternity.Event(name, location, frat, starting, intDuration);
-                        events.add(event);
+                        if (frat != null) {
+                            // String name,  String location, Fraternity frat, Date starting, Integer durationInMinutes
+                            Fraternity.Event event = new Fraternity.Event(name, location, frat, starting, intDuration);
+                            events.add(event);
+                        }
 
                     } catch (Exception e) {
                         Log.e("Error Initializing Event " + (i+1), e.getMessage());

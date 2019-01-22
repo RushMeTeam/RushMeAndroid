@@ -1,6 +1,5 @@
 package com.example.prests1.rushmeandroid;
 
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,17 +7,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.api.client.util.DateTime;
+
+import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
+public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
     private List<Fraternity.Event> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, List<Fraternity.Event> data) {
+    EventRecyclerViewAdapter(Context context, List<Fraternity.Event> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -40,8 +44,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String name = mData.get(position).name;
-        holder.myTextView.setText(name);
+        Fraternity.Event event = mData.get(position);
+        holder.fratNameTV.setText(event.frat.getName().toUpperCase() + " | " + event.location);
+        holder.eventNameTV.setText(event.name);
+        android.text.format.DateFormat df = new android.text.format.DateFormat();
+        String strOut = (df.format("MM.dd.yy h:mm a", event.starting)).toString();
+        strOut += " - " + (df.format("h:mm a", event.ending)).toString();
+        holder.infoTV.setText(strOut);
+
     }
 
     // total number of rows
@@ -53,11 +63,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
+        TextView fratNameTV;
+        TextView eventNameTV;
+        TextView infoTV;
 
         ViewHolder(View itemView) {
             super(itemView);
-            myTextView = itemView.findViewById(R.id.fratNameTV);
+            eventNameTV = itemView.findViewById(R.id.eventNameTV);
+            fratNameTV = itemView.findViewById(R.id.fratNameTV);
+            infoTV = itemView.findViewById(R.id.infoTV);
             itemView.setOnClickListener(this);
         }
 
