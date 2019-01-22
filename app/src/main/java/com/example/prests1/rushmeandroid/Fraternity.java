@@ -42,7 +42,7 @@ public class Fraternity implements  Serializable{
     //public String getImage() { return this.imgURL; }
     //public String getCalendar() { return this.calendarURL; }
 
-    public static class Event implements Serializable {
+    public static class Event implements Serializable{
         //        static func ==(lhs: Fraternity.Event, rhs: Fraternity.Event) -> Bool {
 //            return lhs.frat == rhs.frat && lhs.starting == rhs.starting && lhs.name == rhs.name
 //        }

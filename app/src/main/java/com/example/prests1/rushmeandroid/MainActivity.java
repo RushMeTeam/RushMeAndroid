@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
@@ -156,20 +157,20 @@ public class MainActivity extends AppCompatActivity {
 
         fraternityScrollView = (ScrollView) findViewById(R.id.fraternities);
 
-//        /**
-//         * Generate Calendar clickable
-//         */
-//        Button calendarBtn = (Button) findViewById(R.id.calendarBtn);
-//        calendarBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openCalendar();
-//            }
-//        });
-//
-//        /**
-//         * Generate Map clickable
-//         */
+          /**
+           * Generate Calendar clickable
+           */
+          Button calendarBtn = (Button) findViewById(R.id.calendarBtn);
+          calendarBtn.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  openCalendar();
+              }
+          });
+
+          /**
+           * Generate Map clickable
+           */
           Button mapBtn = (Button) findViewById(R.id.btnMap);
           mapBtn.setOnClickListener(new View.OnClickListener() {
               @Override
@@ -240,11 +241,11 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MAINEVENT", events.get(i).name);
             clone.add(events.get(i));
         }
-        
+
         Intent intent = new Intent(this, Events.class);
         Bundle b = new Bundle();
-        //b.putParcelableArrayList("events", events);
-        intent.putExtra("events", clone);
+        b.putSerializable("events", (Serializable) events);
+        intent.putExtra("bundle", b);
         startActivity(intent);
     }
 

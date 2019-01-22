@@ -1,5 +1,6 @@
 package com.example.prests1.rushmeandroid;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +25,9 @@ public class Events extends AppCompatActivity {
         setContentView(R.layout.activity_events);
 
         /* Get events from last activity */
-        events = (ArrayList<Fraternity.Event>) getIntent().getSerializableExtra("events");
-
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("bundle");
+        events = (ArrayList<Fraternity.Event>) args.getSerializable("events");
         Log.d("EVENTSSIZENEW", Integer.toString(events.size()));
         LinearLayout eventsLayout = (LinearLayout) findViewById(R.id.eventLayout);
 
