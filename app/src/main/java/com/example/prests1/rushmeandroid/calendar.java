@@ -24,6 +24,7 @@ public class calendar extends AppCompatActivity {
 
     ListView parent;
     TextView test;
+    private Adapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,20 +52,14 @@ public class calendar extends AppCompatActivity {
         final ArrayList<String> searchResults = GetSearchResults();
 
         final ListView lv = (ListView) findViewById(R.id.calendarList);
-        lv.setAdapter(new Adapter(this, searchResults));
+        adapter = new Adapter(this, searchResults);
+        lv.setAdapter(adapter);
 
         rushCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 searchResults.add(Integer.toString(dayOfMonth));
-                /*
-                parent.removeView(test);
-                test = new TextView(calendar.this);
-                test.setHeight(300);
-                test.setText(Integer.toString(dayOfMonth));
-                parent.addView(test);
-                parent.addView(test);
-                */
+                adapter.notifyDataSetChanged();
             }
         });
     }
