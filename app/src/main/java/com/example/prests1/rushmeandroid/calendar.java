@@ -49,7 +49,7 @@ public class calendar extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final ArrayList<String> searchResults = GetSearchResults();
+        final ArrayList<String> searchResults = new ArrayList<String>();
 
         final ListView lv = (ListView) findViewById(R.id.calendarList);
         adapter = new Adapter(this, searchResults);

@@ -72,6 +72,29 @@ public class MainActivity extends AppCompatActivity {
     private ArrayMap<CalendarDay, Integer> eventNum;
     MaterialCalendarView newCal;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        /* Get the Material Calendar from Main Activity XML file */
+        newCal = (MaterialCalendarView) findViewById(R.id.newCal);
+
+        /* Set MIN/MAX range */
+        newCal.state().edit()
+                .setFirstDayOfWeek(Calendar.SUNDAY)
+                .setMinimumDate(CalendarDay.from(2018, 7 , 23))
+                .setMaximumDate(CalendarDay.from(2018,10,28))
+                .setCalendarDisplayMode(CalendarMode.MONTHS)
+                .commit();
+
+        /**
+         * Call for All fraternityScrollView
+         */
+        new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
+        log("APP DID LOAD", "");
+    }
+
     protected void log(String action, String options) {
         new LogAction().execute(action, options);
     }
@@ -139,28 +162,6 @@ public class MainActivity extends AppCompatActivity {
             return "Success";
 
         }
-    }
-
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        newCal = (MaterialCalendarView) findViewById(R.id.newCal);
-        newCal.state().edit()
-                .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2018, 7 , 23))
-                .setMaximumDate(CalendarDay.from(2018,10,28))
-                .setCalendarDisplayMode(CalendarMode.MONTHS)
-                .commit();
-
-        /**
-         * Call for All fraternityScrollView
-         */
-        new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
-        log("APP DID LOAD", "");
     }
 
     static String get(String sURL) throws Exception {
@@ -350,6 +351,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Take the event arraylist and convert the dates into an arraymap to see show the total # of events on a certain day
+     *
+     */
     private ArrayMap<CalendarDay, Integer> parseEvents(ArrayList<Fraternity.Event> events){
         ArrayMap<CalendarDay, Integer> eventNums = new ArrayMap<CalendarDay, Integer>();
         for(int i=0; i<events.size(); ++i){
