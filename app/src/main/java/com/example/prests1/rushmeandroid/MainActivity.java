@@ -2,14 +2,26 @@ package com.example.prests1.rushmeandroid;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.CalendarMode;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -31,8 +43,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.util.Collection;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,14 +58,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     ProgressDialog pd;
-    LinearLayout parent;
-    ScrollView fraternityScrollView;
     HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>();
     HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
     ArrayList<Fraternity.Event> events;
+    ListView eventList;
+    private Adapter adapter;
+    private ArrayMap<CalendarDay, Integer> eventNum;
+    MaterialCalendarView newCal;
 
     protected void log(String action, String options) {
         new LogAction().execute(action, options);
@@ -127,54 +148,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        parent = (LinearLayout) findViewById(R.id.fraternityView);
+        newCal = (MaterialCalendarView) findViewById(R.id.newCal);
+        newCal.state().edit()
+                .setFirstDayOfWeek(Calendar.SUNDAY)
+                .setMinimumDate(CalendarDay.from(2018, 7 , 23))
+                .setMaximumDate(CalendarDay.from(2018,10,28))
+                .setCalendarDisplayMode(CalendarMode.MONTHS)
+                .commit();
 
         /**
          * Call for All fraternityScrollView
          */
         new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
         log("APP DID LOAD", "");
-        /**
-         * Generate a bunch of clickables for fraternityScrollView
-         */
-//        for (int i = 0; i < 100; i++) {
-//            btn = new Button(MainActivity.this);
-//            btn.setHeight(300);
-//            btn.setId(i + 1);
-//            btn.setText(frat1.getName());
-//            btn.setTag(i);
-//            btn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    openFraternityProfile();
-//                }
-//            });
-//            parent.addView(btn);
-//        }
-
-        fraternityScrollView = (ScrollView) findViewById(R.id.fraternities);
-
-//        /**
-//         * Generate Calendar clickable
-//         */
-//        Button calendarBtn = (Button) findViewById(R.id.calendarBtn);
-//        calendarBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openCalendar();
-//            }
-//        });
-//
-//        /**
-//         * Generate Map clickable
-//         */
-//        Button mapBtn = (Button) findViewById(R.id.btnMap);
-//        mapBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMap();
-//            }
-//        });
     }
 
     static String get(String sURL) throws Exception {
@@ -209,33 +195,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    /**
-     * Store fraternity info in an intent and move to fraternityprofile
-     */
-//    public void openFraternityProfile() {
-//        Intent intent = new Intent(this, FraternityProfile.class);
-//        intent.putExtra("fraternity", frat1.getName());
-//        intent.putExtra("chapter", frat1.getName());
-//        intent.putExtra("memberCount", frat1.getMemberCount());
-//        intent.putExtra("description", frat1.getDescription());
-//        startActivity(intent);
-//    }
-
-    /**
-     * move to calendar activity
-     */
-    public void openCalendar() {
-        startActivity(new Intent(this, calendar.class));
-    }
-
-    /**
-     * move to map activity
-     */
-    public void openMap() {
-        startActivity(new Intent(this, map.class));
-    }
-
-
 
     /**
      * Json Array from URL
@@ -317,7 +276,14 @@ public class MainActivity extends AppCompatActivity {
             if (pd.isShowing()){
                 pd.dismiss();
             }
-
+            /* Labeling event numbers on calendar */
+            eventNum = parseEvents(events);
+            for(CalendarDay i : eventNum.keySet()){
+                Log.d("EVENTINFO", Integer.toString(i.getMonth()) + "/" +Integer.toString(i.getDay()) + "/" + Integer.toString(i.getYear()));
+                ArrayList<CalendarDay> temp = new ArrayList<CalendarDay>();
+                temp.add(i);
+                newCal.addDecorator(new eventDecorator(Color.parseColor("red"), temp, eventNum.get(i)));
+            }
         }
     }
 
@@ -382,5 +348,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private ArrayMap<CalendarDay, Integer> parseEvents(ArrayList<Fraternity.Event> events){
+        ArrayMap<CalendarDay, Integer> eventNums = new ArrayMap<CalendarDay, Integer>();
+        for(int i=0; i<events.size(); ++i){
+            CalendarDay temp = new CalendarDay(events.get(i).starting);
+            if(!eventNums.containsKey(temp)){
+                eventNums.put(temp, 1);
+            } else {
+                int num = eventNums.get(temp);
+                ++num;
+                eventNums.put(temp, num);
+            }
+        }
+        return eventNums;
     }
 }
