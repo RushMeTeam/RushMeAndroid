@@ -17,7 +17,7 @@
         app:mcv_selectionColor="#FFF"/>
 
     <ListView
-        android:id="@+id/calendarList"
+        android:id="@+id/newCalList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

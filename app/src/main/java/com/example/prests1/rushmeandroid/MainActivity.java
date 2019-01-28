@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
     HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
     ArrayList<Fraternity.Event> events;
     ListView eventList;
-    private Adapter adapter;
     private ArrayMap<CalendarDay, Integer> eventNum;
     MaterialCalendarView newCal;
+    Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,26 @@ public class MainActivity extends AppCompatActivity {
          */
         new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
         log("APP DID LOAD", "");
+
+        final ArrayList<Fraternity.Event> eventResults = new ArrayList<Fraternity.Event>();
+        final ListView lv = (ListView) findViewById(R.id.newCalList);
+        adapter = new Adapter(this, eventResults);
+        lv.setAdapter(adapter);
+        newCal.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                eventResults.removeAll(eventResults);
+                for(int i=0; i<events.size(); ++i){
+
+                    CalendarDay temp = new CalendarDay(events.get(i).starting);
+                    if((temp.getDay() == date.getDay()) && (temp.getYear() == date.getYear()) && (temp.getMonth() == date.getMonth())){
+                        eventResults.add(events.get(i));
+                    }
+                }
+                Log.d("SIZER", Integer.toString(eventResults.size()));
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     protected void log(String action, String options) {
@@ -277,6 +299,10 @@ public class MainActivity extends AppCompatActivity {
             if (pd.isShowing()){
                 pd.dismiss();
             }
+
+            /* Sort events */
+            events = sortEvents(events);
+
             /* Labeling event numbers on calendar */
             eventNum = parseEvents(events);
             for(CalendarDay i : eventNum.keySet()){
@@ -368,5 +394,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return eventNums;
+    }
+
+    private ArrayList<Fraternity.Event> sortEvents(ArrayList<Fraternity.Event> events){
+        for(int i=0; i<events.size(); ++i){
+            for(int j=0; j<events.size(); ++j){
+                if(events.get(i).starting.compareTo(events.get(j).starting) > 0){
+                    Fraternity.Event temp = events.get(i);
+                    events.set(i, events.get(j));
+                    events.set(j, temp);
+                }
+            }
+        }
+        return events;
     }
 }

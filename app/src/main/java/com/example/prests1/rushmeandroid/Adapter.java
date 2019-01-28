@@ -11,11 +11,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Adapter extends BaseAdapter {
-    private static ArrayList<String> searchArrayList;
+    private static ArrayList<Fraternity.Event> searchArrayList;
 
     private LayoutInflater mInflater;
 
-    public Adapter(Context context, ArrayList<String> results){
+    public Adapter(Context context, ArrayList<Fraternity.Event> results){
         searchArrayList = results;
         mInflater = LayoutInflater.from(context);
     }
@@ -24,7 +24,7 @@ public class Adapter extends BaseAdapter {
         return searchArrayList.size();
     }
 
-    public String getItem(int position){
+    public Fraternity.Event getItem(int position){
         return searchArrayList.get(position);
     }
 
@@ -43,7 +43,7 @@ public class Adapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.txtName.setText(searchArrayList.get(position));
+        holder.txtName.setText(searchArrayList.get(position).name);
 
         return convertView;
     }

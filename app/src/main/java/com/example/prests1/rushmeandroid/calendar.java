@@ -31,7 +31,7 @@ public class calendar extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        parent = (ListView) findViewById(R.id.calendarList);
+        parent = (ListView) findViewById(R.id.newCalList);
 
         CalendarView rushCalendar = (CalendarView) findViewById(R.id.rushCalendar);
 
@@ -48,7 +48,7 @@ public class calendar extends AppCompatActivity {
         }catch (ParseException e) {
             e.printStackTrace();
         }
-
+        /*
         final ArrayList<String> searchResults = new ArrayList<String>();
 
         final ListView lv = (ListView) findViewById(R.id.calendarList);
@@ -62,6 +62,7 @@ public class calendar extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+        */
     }
 
     private ArrayList<String> GetSearchResults(){
