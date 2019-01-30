@@ -7,8 +7,13 @@
     android:orientation="vertical"
     android:id="@+id/calendarView">
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <Button
+        android:id="@+id/fratList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To Frat List" />
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/newCal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,8 +21,8 @@
         app:mcv_showOtherDates="all"
         app:mcv_selectionColor="#FFF"/>
 
-    <ListView
-        android:id="@+id/newCalList"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fraternitiesRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 </LinearLayout>
