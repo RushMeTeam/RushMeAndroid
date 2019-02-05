@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 // This class determines the structure of the 'Fraternity' object.
-public class Fraternity implements  Serializable{
+public class Fraternity {
 
     //Private variables storing information for an individual fraternity.
     //To be extended... limited data being used at first for testing purposes.
@@ -43,7 +43,8 @@ public class Fraternity implements  Serializable{
     //public String getImage() { return this.imgURL; }
     //public String getCalendar() { return this.calendarURL; }
 
-    public static class Event implements Serializable{
+
+    public static class Event {
         //        static func ==(lhs: Fraternity.Event, rhs: Fraternity.Event) -> Bool {
 //            return lhs.frat == rhs.frat && lhs.starting == rhs.starting && lhs.name == rhs.name
 //        }

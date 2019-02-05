@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     ListView eventList;
     private ArrayMap<CalendarDay, Integer> eventNum;
     MaterialCalendarView newCal;
-    Adapter adapter;
+    EventRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +100,14 @@ public class MainActivity extends AppCompatActivity {
         log("APP DID LOAD", "");
 
         final ArrayList<Fraternity.Event> eventResults = new ArrayList<Fraternity.Event>();
-        final ListView lv = (ListView) findViewById(R.id.newCalList);
-        adapter = new Adapter(this, eventResults);
-        lv.setAdapter(adapter);
+        final RecyclerView rv = findViewById(R.id.fraternitiesRV);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new EventRecyclerViewAdapter(this, eventResults);
+        rv.setAdapter(adapter);
         newCal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+
                 eventResults.removeAll(eventResults);
                 for(int i=0; i<events.size(); ++i){
 
@@ -113,6 +118,14 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Log.d("SIZER", Integer.toString(eventResults.size()));
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+        Button fratList = (Button) findViewById(R.id.fratList);
+        fratList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toFratList();
             }
         });
     }
@@ -303,6 +316,8 @@ public class MainActivity extends AppCompatActivity {
             /* Sort events */
             events = sortEvents(events);
 
+            Campus campus = ((Campus) getApplicationContext());
+            campus.setEvents(events);
             /* Labeling event numbers on calendar */
             eventNum = parseEvents(events);
             for(CalendarDay i : eventNum.keySet()){
@@ -371,6 +386,9 @@ public class MainActivity extends AppCompatActivity {
             if (pd.isShowing()){
                 pd.dismiss();
             }
+            Campus campus = ((Campus) getApplicationContext());
+            campus.setFrats(fraternities);
+            campus.setFratsByKey(fraternitiesByKey);
             new LoadEventsTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/events.rushme");
 
 
@@ -407,5 +425,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return events;
+    }
+
+    private void toFratList(){
+        Intent intent = new Intent(this, FraternityList.class);
+        startActivity(intent);
     }
 }

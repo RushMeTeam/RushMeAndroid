@@ -31,7 +31,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         mData = new ArrayList<Fraternity.Event>();
         mData.clear();
         mData.addAll(events);
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     // inflates the row layout from xml when needed
