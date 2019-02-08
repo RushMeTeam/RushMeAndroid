@@ -21,5 +21,5 @@ public class FraternityList extends AppCompatActivity {
         fraternities = campus.getFrats();
         fraternitiesByKey = campus.getFratsByKey();
     }
-    
+
 }

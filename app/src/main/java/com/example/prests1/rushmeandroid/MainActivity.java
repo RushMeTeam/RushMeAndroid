@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         /* Set MIN/MAX range */
         newCal.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
-                .setMinimumDate(CalendarDay.from(2018, 7 , 23))
-                .setMaximumDate(CalendarDay.from(2018,10,28))
+                .setMinimumDate(CalendarDay.from(2019,0,1))
+                .setMaximumDate(CalendarDay.from(2019,3,28))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
 
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 Log.d("SIZER", Integer.toString(eventResults.size()));
-                adapter.notifyDataSetChanged();
+                adapter.updateData(eventResults);
             }
         });
 
@@ -278,17 +278,23 @@ public class MainActivity extends AppCompatActivity {
                         String[] splitDuration = duration.split(":");
 
                         int intDuration = Integer.parseInt(splitDuration[0])*60 + Integer.parseInt(splitDuration[1]);
-                        String description = eventJSON.getString("description");
+                        String description = eventJSON.has("description") ? eventJSON.getString("description") : "";
                         String fratKey = eventJSON.getString("frat_name_key");
                         String startTime = eventJSON.getString("start_time");
                         DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
                         Date starting = (Date) df1.parse(startTime);
+                        Log.d("DBUG_EVENT_TIME", Integer.toString(starting.getDay()));
                         String inviteOnly = eventJSON.getString("invite_only");
                         String location = eventJSON.getString("location");
                         Fraternity frat = fraternitiesByKey.get(fratKey);
-                        // String name,  String location, Fraternity frat, Date starting, Integer durationInMinutes
-                        Fraternity.Event event = new Fraternity.Event(name, location, frat, starting, intDuration);
-                        events.add(event);
+                        if(frat != null){
+                            // String name,  String location, Fraternity frat, Date starting, Integer durationInMinutes
+                            Fraternity.Event event = new Fraternity.Event(name, location, frat, starting, intDuration);
+                            events.add(event);
+                        }else {
+                            Log.d("NULL FRAT EVENT", " > " +name + " " + fratKey + " Month: " + Integer.toString(starting.getMonth()+1) + " Day: " + Integer.toString(starting.getDay()+1));
+                        }
+
 
                     } catch (Exception e) {
                         Log.e("Error Initializing Event " + (i+1), e.getMessage());
@@ -364,6 +370,9 @@ public class MainActivity extends AppCompatActivity {
                         Fraternity frat = new Fraternity(name, key, chapter, members, description);
                         fraternities.put(frat.getName(), frat);
                         fraternitiesByKey.put(frat.getKey(), frat);
+                        if(key == "PDP"){
+                            Log.d("PDP FRAT", name);
+                        }
                     } catch (Exception e) {
                         Log.e("Error Initializing Fraternity " + (i+1), e.getMessage());
                     }
@@ -390,8 +399,6 @@ public class MainActivity extends AppCompatActivity {
             campus.setFrats(fraternities);
             campus.setFratsByKey(fraternitiesByKey);
             new LoadEventsTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/events.rushme");
-
-
         }
     }
 
