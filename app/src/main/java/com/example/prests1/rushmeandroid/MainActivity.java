@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -330,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("EVENTINFO", Integer.toString(i.getMonth()) + "/" +Integer.toString(i.getDay()) + "/" + Integer.toString(i.getYear()));
                 ArrayList<CalendarDay> temp = new ArrayList<CalendarDay>();
                 temp.add(i);
-                newCal.addDecorator(new eventDecorator(Color.parseColor("red"), temp, eventNum.get(i)));
+                newCal.addDecorator(new eventDecorator(ResourcesCompat.getColor(getResources(), R.color.RushMePrimary, null), temp, eventNum.get(i)));
             }
         }
     }
