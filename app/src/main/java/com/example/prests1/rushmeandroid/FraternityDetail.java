@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-public class FraternityProfile extends AppCompatActivity {
+public class FraternityDetail extends AppCompatActivity {
     TextView name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fraternity_profile);
+        setContentView(R.layout.activity_fraternity_detail);
 
         String fraternityName;
         String chapterName;
@@ -53,7 +51,7 @@ public class FraternityProfile extends AppCompatActivity {
 
         setTitle(fraternityName);
 
-        ImageView chapterImage = (ImageView) findViewById(R.id.chapterImage);
+        ImageView chapterImage = (ImageView) findViewById(R.id.profileImageView);
 
     }
 }

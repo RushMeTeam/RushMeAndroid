@@ -22,6 +22,7 @@ import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -68,12 +69,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EventRecyclerViewAdapter.ItemClickListener {
     ProgressDialog pd;
     HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>();
     HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
     ArrayList<Fraternity.Event> events;
-    ListView eventList;
+    ArrayList<Fraternity.Event> selectedEvents;
+    ListView eventListView;
     private ArrayMap<CalendarDay, Integer> eventNum;
     MaterialCalendarView newCal;
     EventRecyclerViewAdapter adapter;
@@ -98,37 +100,40 @@ public class MainActivity extends AppCompatActivity {
          * Call for All fraternityScrollView
          */
         new RemoteContentTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme", "https://s3.us-east-2.amazonaws.com/rushmepublic/events.rushme");
-        log("APP DID LOAD", "");
+        log("App Entered Foreground", "");
 
-        final ArrayList<Fraternity.Event> eventResults = new ArrayList<Fraternity.Event>();
+        selectedEvents = new ArrayList<Fraternity.Event>();
         final RecyclerView rv = findViewById(R.id.fraternitiesRV);
+
         rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EventRecyclerViewAdapter(this, eventResults);
+
+        adapter = new EventRecyclerViewAdapter(this, selectedEvents);
+        adapter.setClickListener(this);
         rv.setAdapter(adapter);
+
         newCal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-
-                eventResults.removeAll(eventResults);
+                selectedEvents.clear();
                 for(int i=0; i<events.size(); ++i){
 
                     CalendarDay temp = new CalendarDay(events.get(i).starting);
                     if((temp.getDay() == date.getDay()) && (temp.getYear() == date.getYear()) && (temp.getMonth() == date.getMonth())){
-                        eventResults.add(events.get(i));
+                        selectedEvents.add(events.get(i));
                     }
                 }
-                Log.d("SIZER", Integer.toString(eventResults.size()));
-                adapter.updateData(eventResults);
+                Log.d("SIZER", Integer.toString(selectedEvents.size()));
+                adapter.updateData(selectedEvents);
             }
         });
 
-        Button fratList = (Button) findViewById(R.id.fratList);
-        fratList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toFratList();
-            }
-        });
+//        Button fratList = (Button) findViewById(R.id.fratList);
+//        fratList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toFratList();
+//            }
+//        });
     }
 
     protected void log(String action, String options) {
@@ -200,6 +205,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onItemClick(View view, int position) {
+        TextView eventNameTV = view.findViewById(R.id.eventNameTV);
+        TextView fratNameTV =  view.findViewById(R.id.fratNameTV);
+        if (position >= 0 && position < selectedEvents.size()) {
+            Fraternity.Event event = selectedEvents.get(position);
+            log("Selected Event", event.name);
+            startActivityFor(event.frat);
+        }
+    }
+
+    private void startActivityFor(Fraternity fraternity) {
+
+        startActivity(new Intent(MainActivity.this, FraternityDetail.class));
+    }
 
 
     /**
@@ -323,7 +342,6 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(String... params) {
             return loadFraternities(params[0]) + "\n" + loadEvents(params[1]);
-
         }
 
         String get(String sURL) throws Exception {
