@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 
 
@@ -44,10 +45,12 @@ public class Fraternity {
     //public String getCalendar() { return this.calendarURL; }
 
 
-    public static class Event {
-        //        static func ==(lhs: Fraternity.Event, rhs: Fraternity.Event) -> Bool {
-//            return lhs.frat == rhs.frat && lhs.starting == rhs.starting && lhs.name == rhs.name
-//        }
+    public static class Event implements Comparable<Event> {
+        public int compareTo(Event other) {
+            int startCmp = this.starting.compareTo(other.starting);
+            return startCmp == 0 ? this.starting.compareTo(other.starting) : startCmp;
+        }
+
         Date starting;
         Date ending;
         String name;
@@ -104,4 +107,10 @@ public class Fraternity {
 
     }
 
+}
+
+class SortChronologically implements Comparator<Fraternity.Event> {
+    public int compare(Fraternity.Event lhs, Fraternity.Event rhs) {
+        return lhs.compareTo(rhs);
+    }
 }
