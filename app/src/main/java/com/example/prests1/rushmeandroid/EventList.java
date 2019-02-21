@@ -17,13 +17,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Events extends AppCompatActivity {
+public class EventList extends AppCompatActivity {
 
     ArrayList<Fraternity.Event> events = new ArrayList<Fraternity.Event>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events);
+//        setContentView(R.layout.activity_events);
 
         /* Get events from last activity */
         Bundle bundle = this.getIntent().getExtras();
@@ -31,7 +31,7 @@ public class Events extends AppCompatActivity {
         if(bundle != null) {
             events = (ArrayList<Fraternity.Event>) bundle.getSerializable("fratlist");
         }
-        Log.d("SIZZZEEEE", Integer.toString(events.size()));
+        Log.d("EventSize", Integer.toString(events.size()));
 
 //
 //        LinearLayout eventsLayout = (LinearLayout) findViewById(R.id.eventLayout);

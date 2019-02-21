@@ -22,6 +22,7 @@ import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -68,12 +69,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EventRecyclerViewAdapter.ItemClickListener {
     ProgressDialog pd;
     HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>();
     HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
     ArrayList<Fraternity.Event> events;
-    ListView eventList;
+    ArrayList<Fraternity.Event> selectedEvents;
+    ListView eventListView;
     private ArrayMap<CalendarDay, Integer> eventNum;
     MaterialCalendarView newCal;
     EventRecyclerViewAdapter adapter;
@@ -97,38 +99,41 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Call for All fraternityScrollView
          */
-        new LoadFraternitiesTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme");
-        log("APP DID LOAD", "");
+        new RemoteContentTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme", "https://s3.us-east-2.amazonaws.com/rushmepublic/events.rushme");
+        log("App Entered Foreground", "");
 
-        final ArrayList<Fraternity.Event> eventResults = new ArrayList<Fraternity.Event>();
+        selectedEvents = new ArrayList<Fraternity.Event>();
         final RecyclerView rv = findViewById(R.id.fraternitiesRV);
+
         rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new EventRecyclerViewAdapter(this, eventResults);
+
+        adapter = new EventRecyclerViewAdapter(this, selectedEvents);
+        adapter.setClickListener(this);
         rv.setAdapter(adapter);
+
         newCal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-
-                eventResults.removeAll(eventResults);
+                selectedEvents.clear();
                 for(int i=0; i<events.size(); ++i){
 
                     CalendarDay temp = new CalendarDay(events.get(i).starting);
                     if((temp.getDay() == date.getDay()) && (temp.getYear() == date.getYear()) && (temp.getMonth() == date.getMonth())){
-                        eventResults.add(events.get(i));
+                        selectedEvents.add(events.get(i));
                     }
                 }
-                Log.d("SIZER", Integer.toString(eventResults.size()));
-                adapter.updateData(eventResults);
+                Log.d("SIZER", Integer.toString(selectedEvents.size()));
+                adapter.updateData(selectedEvents);
             }
         });
 
-        Button fratList = (Button) findViewById(R.id.fratList);
-        fratList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toFratList();
-            }
-        });
+//        Button fratList = (Button) findViewById(R.id.fratList);
+//        fratList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toFratList();
+//            }
+//        });
     }
 
     protected void log(String action, String options) {
@@ -165,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 nameValuePairs.add(new BasicNameValuePair("dtype", android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL));
 
                 nameValuePairs.add(new BasicNameValuePair("dsoft", android.os.Build.VERSION.RELEASE));
-                nameValuePairs.add(new BasicNameValuePair("appv", "0001"));
+                nameValuePairs.add(new BasicNameValuePair("appv", "0.5.1"));
                 new UrlEncodedFormEntity(nameValuePairs).writeTo(out);
 //                Log.d("WOW", done);
 //                // Execute HTTP Post Request
@@ -200,43 +205,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    static String get(String sURL) throws Exception {
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(sURL);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-
-
-            InputStream stream = connection.getInputStream();
-
-            reader = new BufferedReader(new InputStreamReader(stream));
-
-            StringBuffer buffer = new StringBuffer();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line + "\n");
-            }
-            return buffer.toString();
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                Log.e("Close Connection Error",e.getMessage());
-            }
+    public void onItemClick(View view, int position) {
+        TextView eventNameTV = view.findViewById(R.id.eventNameTV);
+        TextView fratNameTV =  view.findViewById(R.id.fratNameTV);
+        if (position >= 0 && position < selectedEvents.size()) {
+            Fraternity.Event event = selectedEvents.get(position);
+            log("Selected Event", event.name);
+            startActivityFor(event.frat);
         }
     }
+
+    private void startActivityFor(Fraternity fraternity) {
+
+        startActivity(new Intent(MainActivity.this, FraternityDetail.class));
+    }
+
 
     /**
      * Json Array from URL
      */
-    private class LoadEventsTask extends AsyncTask<String, String, String> {
+    private class RemoteContentTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
             super.onPreExecute();
@@ -246,10 +234,49 @@ public class MainActivity extends AppCompatActivity {
             pd.setCancelable(false);
             pd.show();
         }
+        protected String loadFraternities(String fromSURL) {
+            String rawGet = "{}";
+            try {
+                rawGet = this.get(fromSURL);
+            } catch (Exception e) {
+                Log.e("LoadFraternities", e.getMessage());
+            }
+            JSONArray fraternitiesJSONArray;
+            try {
 
+                fraternitiesJSONArray = new JSONArray(rawGet);
+                int length = fraternitiesJSONArray.length();
+                for (int i = 0; i < length; i++) {
+                    try {
+                        JSONObject fratJSON = fraternitiesJSONArray.getJSONObject(i);
+                        String name = fratJSON.getString("name");
+                        String chapter = fratJSON.getString("chapter");
+                        int members = fratJSON.getInt("member_count");
+                        String description = fratJSON.getString("description");
+                        String key = fratJSON.getString("namekey");
+                        Fraternity frat = new Fraternity(name, key, chapter, members, description);
+                        fraternities.put(frat.getName(), frat);
+                        fraternitiesByKey.put(frat.getKey(), frat);
+                        if(key == "PDP"){
+                            Log.d("PDP FRAT", name);
+                        }
+                    } catch (Exception e) {
+                        Log.e("Error Initializing Fraternity " + (i+1), e.getMessage());
+                    }
+                }
+                Log.d("Load Fraternities", "Initialized " + fraternities.size() + " fraternities");
+                return "Success";
+            }
+            catch (JSONException e) {
+                Log.e("Load Fraternities", e.toString());
+            } catch (Exception e) {
+                Log.e("Load Fraternities", e.toString());
+            }
+            return "Failure";
+        }
 
-        protected String doInBackground(String... params) {
-            /*{
+        protected String loadEvents(String fromSURL) {
+              /*{
             "description": "This is a Greek wide event hosted by the Interfraternal Council to distribute chapter recruitment calendars and provide information about Greek Life at RPI.",
             "duration": "03:00",
             "event_name": "IFC Kickoff",
@@ -261,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             */
             String rawGet = "{}";
             try {
-                rawGet = MainActivity.get(params[0]);
+                rawGet = this.get(fromSURL);
             } catch (Exception e) {
                 Log.e("LoadFraternities", e.getMessage());
                 return "Failure";
@@ -310,6 +337,44 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Load Events", "Exception");
             }
             return "Failure";
+
+        }
+
+        protected String doInBackground(String... params) {
+            return loadFraternities(params[0]) + "\n" + loadEvents(params[1]);
+        }
+
+        String get(String sURL) throws Exception {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(sURL);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+
+                InputStream stream = connection.getInputStream();
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line + "\n");
+                }
+                return buffer.toString();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    Log.e("Close Connection Error",e.getMessage());
+                }
+            }
         }
 
         @Override
@@ -321,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             /* Sort events */
-            events = sortEvents(events);
+            events.sort(new SortChronologically());
 
             Campus campus = ((Campus) getApplicationContext());
             campus.setEvents(events);
@@ -331,77 +396,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("EVENTINFO", Integer.toString(i.getMonth()) + "/" +Integer.toString(i.getDay()) + "/" + Integer.toString(i.getYear()));
                 ArrayList<CalendarDay> temp = new ArrayList<CalendarDay>();
                 temp.add(i);
-                newCal.addDecorator(new eventDecorator(ResourcesCompat.getColor(getResources(), R.color.RushMePrimary, null), temp, eventNum.get(i)));
+                newCal.addDecorator(new eventDecorator(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null), temp, eventNum.get(i)));
             }
         }
     }
 
-    private class LoadFraternitiesTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pd = new ProgressDialog(MainActivity.this);
-            pd.setMessage("Loading fraternities...");
-            pd.setCancelable(false);
-            pd.show();
-        }
-
-
-        protected String doInBackground(String... params) {
-            String rawGet = "{}";
-            try {
-                rawGet = MainActivity.get(params[0]);
-            } catch (Exception e) {
-                Log.e("LoadFraternities", e.getMessage());
-            }
-            JSONArray fraternitiesJSONArray;
-            try {
-
-                fraternitiesJSONArray = new JSONArray(rawGet);
-                int length = fraternitiesJSONArray.length();
-                for (int i = 0; i < length; i++) {
-                    try {
-                        JSONObject fratJSON = fraternitiesJSONArray.getJSONObject(i);
-                        String name = fratJSON.getString("name");
-                        String chapter = fratJSON.getString("chapter");
-                        int members = fratJSON.getInt("member_count");
-                        String description = fratJSON.getString("description");
-                        String key = fratJSON.getString("namekey");
-                        Fraternity frat = new Fraternity(name, key, chapter, members, description);
-                        fraternities.put(frat.getName(), frat);
-                        fraternitiesByKey.put(frat.getKey(), frat);
-                        if(key == "PDP"){
-                            Log.d("PDP FRAT", name);
-                        }
-                    } catch (Exception e) {
-                        Log.e("Error Initializing Fraternity " + (i+1), e.getMessage());
-                    }
-                }
-                Log.d("Load Fraternities", "Initialized " + fraternities.size() + " fraternities");
-                return "Success";
-            }
-            catch (JSONException e) {
-                Log.e("Load Fraternities", e.toString());
-            } catch (Exception e) {
-                Log.e("Load Fraternities", e.toString());
-            }
-            return "Failure";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.d("Load Fraternities", result);
-            super.onPostExecute(result);
-            if (pd.isShowing()){
-                pd.dismiss();
-            }
-            Campus campus = ((Campus) getApplicationContext());
-            campus.setFrats(fraternities);
-            campus.setFratsByKey(fraternitiesByKey);
-            new LoadEventsTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/events.rushme");
-        }
-    }
 
     /**
      * Take the event arraylist and convert the dates into an arraymap to see show the total # of events on a certain day
@@ -422,18 +422,6 @@ public class MainActivity extends AppCompatActivity {
         return eventNums;
     }
 
-    private ArrayList<Fraternity.Event> sortEvents(ArrayList<Fraternity.Event> events){
-        for(int i=0; i<events.size(); ++i){
-            for(int j=0; j<events.size(); ++j){
-                if(events.get(i).starting.compareTo(events.get(j).starting) > 0){
-                    Fraternity.Event temp = events.get(i);
-                    events.set(i, events.get(j));
-                    events.set(j, temp);
-                }
-            }
-        }
-        return events;
-    }
 
     private void toFratList(){
         Intent intent = new Intent(this, FraternityList.class);
