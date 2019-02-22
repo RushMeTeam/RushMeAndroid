@@ -1,57 +1,36 @@
 package com.example.prests1.rushmeandroid;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FraternityDetail extends AppCompatActivity {
-    TextView name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fraternity_detail);
+        
+        Intent i = getIntent();
+        Fraternity fraternity = (Fraternity) i.getParcelableExtra("Fraternity");
 
-        String fraternityName;
-        String chapterName;
-        int memberCount;
-        String description;
+        TextView fratName = (TextView) findViewById(R.id.titleView);
+        fratName.setText(fraternity.getName());
 
-        /**
-         * Pulling data out of intent
-         */
-        if(savedInstanceState == null){
-            Bundle extras = getIntent().getExtras();
-            if(extras==null){
-                fraternityName = null;
-                chapterName = null;
-                memberCount = 0;
-                description = null;
-            } else {
-                fraternityName = extras.getString("fraternity");
-                chapterName = extras.getString("chapter");
-                description = extras.getString("description");
-                memberCount = extras.getInt("memberCount");
-            }
+        TextView chapter = (TextView) findViewById(R.id.chapter);
+        chapter.setText(fraternity.getChapter());
+
+        TextView description = (TextView) findViewById(R.id.description);
+        description.setText(fraternity.getDescription());
+
+        TextView memberCount = (TextView) findViewById(R.id.memberCount);
+        if (fraternity.getMemberCount() == 1) {
+            memberCount.setText("1 member");
         } else {
-            fraternityName = (String) savedInstanceState.getSerializable("fraternity");
-            chapterName = (String) savedInstanceState.getSerializable("chapter");
-            memberCount = (int) savedInstanceState.getSerializable("memberCount");
-            description = (String) savedInstanceState.getSerializable("description");
+            memberCount.setText(Integer.toString(fraternity.getMemberCount()) + " members");
         }
-
-        TextView chapterView = (TextView) findViewById(R.id.chapter);
-        chapterView.setText(chapterName);
-
-        TextView memberCountView = (TextView) findViewById(R.id.memberCount);
-        memberCountView.setText("" + memberCount);
-
-        TextView descriptionView = (TextView) findViewById(R.id.description);
-        descriptionView.setText(description);
-
-        setTitle(fraternityName);
-
-        ImageView chapterImage = (ImageView) findViewById(R.id.profileImageView);
 
     }
 }

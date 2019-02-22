@@ -206,18 +206,27 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
     }
 
     public void onItemClick(View view, int position) {
+        /*
+        Context context = view.getContext();
+        Intent intent = new Intent(context, FraternityDetail.class);
+        context.startActivity(intent);
+        */
+
         TextView eventNameTV = view.findViewById(R.id.eventNameTV);
         TextView fratNameTV =  view.findViewById(R.id.fratNameTV);
         if (position >= 0 && position < selectedEvents.size()) {
             Fraternity.Event event = selectedEvents.get(position);
-            log("Selected Event", event.name);
+            Log.d("SELECTED", event.frat.getName());
             startActivityFor(event.frat);
         }
+
     }
 
     private void startActivityFor(Fraternity fraternity) {
-
-        startActivity(new Intent(MainActivity.this, FraternityDetail.class));
+        Intent intent = new Intent(this, FraternityDetail.class);
+        intent.putExtra("Fraternity", fraternity);
+        Log.d("Moving to new", fraternity.getName());
+        startActivity(intent);
     }
 
 

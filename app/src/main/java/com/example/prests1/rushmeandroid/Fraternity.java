@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 // This class determines the structure of the 'Fraternity' object.
-public class Fraternity {
+public class Fraternity implements Parcelable{
 
     //Private variables storing information for an individual fraternity.
     //To be extended... limited data being used at first for testing purposes.
@@ -44,6 +44,43 @@ public class Fraternity {
     //public String getImage() { return this.imgURL; }
     //public String getCalendar() { return this.calendarURL; }
 
+    /* everything below here is for implementing Parcelable */
+
+    // 99.9% of the time you can just ignore this
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    // write your object's data to the passed-in Parcel
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(name);
+        out.writeString(chapter);
+        out.writeInt(memberCount);
+        out.writeString(desc);
+        out.writeString(key);
+    }
+
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Fraternity> CREATOR = new Parcelable.Creator<Fraternity>() {
+        public Fraternity createFromParcel(Parcel in) {
+            return new Fraternity(in);
+        }
+
+        public Fraternity[] newArray(int size) {
+            return new Fraternity[size];
+        }
+    };
+
+    // example constructor that takes a Parcel and gives you an object populated with it's values
+    private Fraternity(Parcel in) {
+        name = in.readString();
+        chapter = in.readString();
+        memberCount = in.readInt();
+        desc = in.readString();
+        key = in.readString();
+    }
 
     public static class Event implements Comparable<Event> {
         public int compareTo(Event other) {
