@@ -40,7 +40,8 @@ public class eventDecorator implements DayViewDecorator {
      * Apply overlay
      */
     public void decorate(DayViewFacade view) {
-        CustomSpan numEvents = new CustomSpan(Integer.toString(eventNum));
+        CustomSpan numEvents = new CustomSpan(Integer.toString(eventNum), color);
         view.addSpan(numEvents);
+        view.addSpan(new ForegroundColorSpan(Color.BLACK));
     }
 }
