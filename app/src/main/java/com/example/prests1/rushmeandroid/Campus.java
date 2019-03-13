@@ -5,6 +5,12 @@ import android.app.Application;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Global object that holds all events and fraternities
+ *
+ * extends Application to make global in the AndroidManifest.xml
+ */
+
 public class Campus extends Application {
     private HashMap<String, Fraternity> frats;
     private HashMap<String, Fraternity> fratsByKey;
