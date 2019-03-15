@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.0.+'
     implementation 'com.github.prolificinteractive:material-calendarview:1.5.0'
     implementation 'com.android.support:support-core-utils:24.2.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 }

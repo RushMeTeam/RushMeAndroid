@@ -1,23 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/calendarView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".calendar"
+    android:gravity="center_vertical"
     android:orientation="vertical"
-    android:id="@+id/calendarView">
+    tools:context=".calendar">
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/newCal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mcv_dateTextAppearance="@color/mcv_text_date_dark"
-        app:mcv_showOtherDates="all"
-        app:mcv_selectionColor="#FFF"/>
+    <!--<Button-->
+    <!--android:id="@+id/fratList"-->
+    <!--style="@style/Widget.AppCompat.Button.Colored"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="To Frat List" />-->
 
-    <ListView
-        android:id="@+id/newCalList"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/newCal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:mcv_selectionColor="@color/colorPrimary"
+            app:mcv_showOtherDates="all"
+            app:mcv_tileHeight="40dp">
+
+        </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fraternitiesRV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        tools:listitem="@layout/recycler_row" />
+
+</android.support.constraint.ConstraintLayout>

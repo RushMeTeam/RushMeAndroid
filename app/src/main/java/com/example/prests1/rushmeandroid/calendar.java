@@ -3,6 +3,7 @@ package com.example.prests1.rushmeandroid;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class calendar extends AppCompatActivity {
 
-    ListView parent;
+    RecyclerView parent;
     TextView test;
     private Adapter adapter;
     @Override
@@ -31,7 +32,7 @@ public class calendar extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        parent = (ListView) findViewById(R.id.newCalList);
+        parent = (RecyclerView) findViewById(R.id.fraternitiesRV);
 
         CalendarView rushCalendar = (CalendarView) findViewById(R.id.rushCalendar);
 
