@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class ActionLogging {
 
-    public void Log(String event, String detail){
+    public static void Log(String event, String detail){
         switch(event){
             case "Fraternity Selected":
                 Log.d("Action Logging", "Fraternity: " + detail + " was selected.");

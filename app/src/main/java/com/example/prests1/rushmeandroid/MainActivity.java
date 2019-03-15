@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
     MaterialCalendarView newCal; /* Calendar reference to Main Activity XML */
     EventRecyclerViewAdapter adapter; /* Adapter for recycler view of selected day's events */
 
-    ActionLogging logger = new ActionLogging(); /* User Action logging for data */
-
     /**
      * onCreate is the function that gets called at the start of an activity tries to load a saved instance
      * @param savedInstanceState
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
         adapter.setClickListener(this);
         rv.setAdapter(adapter);
 
-        
+
         /**
          * CalndarView date change listener
          *
@@ -157,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
     @Override
     protected void onPause(){
         super.onPause();
-        logger.Log("App Background", "");
+        ActionLogging.Log("App Background", "");
     }
 
     protected void log(String action, String options) {
@@ -246,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
      * @param fraternity
      */
     private void startActivityFor(Fraternity fraternity) {
-        logger.Log("Fraternity Selected", fraternity.getName());
+        ActionLogging.Log("Fraternity selected", fraternity.getName());
         Intent intent = new Intent(this, FraternityDetail.class);
         intent.putExtra("Fraternity", fraternity);
         startActivity(intent);
