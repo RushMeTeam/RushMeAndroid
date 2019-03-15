@@ -77,6 +77,23 @@ public class FraternityDetail extends AppCompatActivity {
         new DownloadImagesTask(calendarImage, "https://s3.us-east-2.amazonaws.com/rushmepublic/"+fraternity.getKey()+"semi.jpg").execute();
     }
 
+    /**
+     * Called when the application goes to the background
+     */
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ActionLogging.Log("App Background", "");
+    }
+
+    /**
+     * Called when the application goes to the foreground
+     */
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ActionLogging.Log("App Foreground","");
+    }
 
     /**
      * Asynchronous task to get an image from a URL

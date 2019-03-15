@@ -152,10 +152,22 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
 
     }
 
+    /**
+     * Called when the application goes to the background
+     */
     @Override
     protected void onPause(){
         super.onPause();
         ActionLogging.Log("App Background", "");
+    }
+
+    /**
+     * Called when the application goes to the foreground
+     */
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ActionLogging.Log("App Foreground","");
     }
 
     protected void log(String action, String options) {
