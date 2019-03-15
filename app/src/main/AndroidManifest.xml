@@ -13,8 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FraternityList"></activity>
-        <activity android:name=".EventList" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +24,6 @@
                 android:label="@string/app_name"
             android:parentActivityName=".MainActivity" >
         </activity>
-        <activity android:name=".calendar" />
-        <activity android:name=".map" />
     </application>
 
 </manifest>

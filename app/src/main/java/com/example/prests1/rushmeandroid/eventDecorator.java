@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 
+/**
+ * eventDecorator is used to overlay the number of events below the date that has the events
+ */
 public class eventDecorator implements DayViewDecorator {
 
     private final int color;
@@ -30,6 +33,11 @@ public class eventDecorator implements DayViewDecorator {
         this.eventNum = total;
     }
 
+    /**
+     * Decorate any day that matches the date (should be always true)
+     * @param day
+     * @return
+     */
     @Override
     public boolean shouldDecorate(CalendarDay day) {
         return dates.contains(day);
@@ -42,6 +50,6 @@ public class eventDecorator implements DayViewDecorator {
     public void decorate(DayViewFacade view) {
         CustomSpan numEvents = new CustomSpan(Integer.toString(eventNum), color);
         view.addSpan(numEvents);
-        view.addSpan(new ForegroundColorSpan(Color.BLACK));
+        view.addSpan(new ForegroundColorSpan(Color.BLACK)); //Prevents the date from being the color as the number of events that day
     }
 }

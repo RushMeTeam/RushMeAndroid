@@ -26,19 +26,31 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
+/**
+ * The FraternityDetail Activity is the custom profile for each fraternity
+ *
+ * The activity loads in an intent at the start which has the fraternity that needs to populate the page
+ */
+
 public class FraternityDetail extends AppCompatActivity {
 
-    ImageView profileImage;
-    ImageView calendarImage;
+    ImageView profileImage; //Image at the top of page (fraternity group photo)
+    ImageView calendarImage; //Image at the bottom of page (rush calendar photo)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fraternity_detail);
 
+        /**
+         * Grab fraternity from passed in Intent
+         */
         Intent i = getIntent();
         Fraternity fraternity = (Fraternity) i.getParcelableExtra("Fraternity");
 
+        /**
+         * Populate XML file with fraternity information
+         */
         TextView fratName = (TextView) findViewById(R.id.titleView);
         fratName.setText(fraternity.getName());
 
@@ -55,7 +67,9 @@ public class FraternityDetail extends AppCompatActivity {
             memberCount.setText(Integer.toString(fraternity.getMemberCount()) + " members");
         }
 
-
+        /**
+         * Asynchronously get profileImage and calendar Image from URL
+         */
         profileImage = (ImageView) findViewById(R.id.profileImageView);
         new DownloadImagesTask(profileImage, "https://s3.us-east-2.amazonaws.com/rushmepublic/"+fraternity.getKey()+"profsemi.jpg").execute();
 
@@ -64,10 +78,18 @@ public class FraternityDetail extends AppCompatActivity {
     }
 
 
+    /**
+     * Asynchronous task to get an image from a URL
+     */
     public class DownloadImagesTask extends AsyncTask<Void, Void, Bitmap> {
         ImageView image;
         String url;
 
+        /**
+         * Pass reference to an imageview and the URL you're requesting from
+         * @param img
+         * @param uri
+         */
         public DownloadImagesTask(ImageView img, String uri) {
             this.image = img;
             this.url = uri;
@@ -80,9 +102,15 @@ public class FraternityDetail extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            image.setImageBitmap(result);
+            image.setImageBitmap(result); //set image to result of download_Image function
         }
 
+        /**
+         * Takes a URL and converts it to a bitmap which an imageview can understand
+         *
+         * @param uri
+         * @return
+         */
         private Bitmap download_Image(String uri) {
             try {
                 URL url = new URL(uri);
