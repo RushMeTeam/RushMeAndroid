@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
         adapter.setClickListener(this);
         rv.setAdapter(adapter);
 
+        
         /**
          * CalndarView date change listener
          *

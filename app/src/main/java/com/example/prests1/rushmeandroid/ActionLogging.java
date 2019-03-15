@@ -16,5 +16,6 @@ public class ActionLogging {
                 Log.d("Action Logging", "App has returned to the foreground");
                 break;
         }
+
     }
 }
