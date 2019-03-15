@@ -69,17 +69,27 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity implements EventRecyclerViewAdapter.ItemClickListener {
-    ProgressDialog pd;
-    HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>();
-    HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>();
-    ArrayList<Fraternity.Event> events;
-    ArrayList<Fraternity.Event> selectedEvents;
-    ListView eventListView;
-    private ArrayMap<CalendarDay, Integer> eventNum;
-    MaterialCalendarView newCal;
-    EventRecyclerViewAdapter adapter;
+/**
+ * The Main Activity is the activity loaded on the start of the android application
+ *
+ * Current main activity:
+ *  - Calendar of all events
+ */
 
+public class MainActivity extends AppCompatActivity implements EventRecyclerViewAdapter.ItemClickListener {
+    ProgressDialog pd; /* Loading blocker for events/fraternities */
+    HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>(); /* hash table of fraternities class organized by the names of fraternities on campus */
+    HashMap<String, Fraternity> fraternitiesByKey = new HashMap<String, Fraternity>(); /* hash table of fraternities organized by the unique 3 letter queue for each fraternity */
+    ArrayList<Fraternity.Event> events; /* List of all events on campus */
+    ArrayList<Fraternity.Event> selectedEvents; /* List of events selected for calendar day selected */
+    private ArrayMap<CalendarDay, Integer> eventNum; /* Number of events for each calendar day stored in an iterable hash table */
+    MaterialCalendarView newCal; /* Calendar reference to Main Activity XML */
+    EventRecyclerViewAdapter adapter; /* Adapter for recycler view of selected day's events */
+
+    /**
+     * onCreate is the function that gets called at the start of an activity tries to load a saved instance
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +112,14 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
         new RemoteContentTask().execute("https://s3.us-east-2.amazonaws.com/rushmepublic/fraternites.rushme", "https://s3.us-east-2.amazonaws.com/rushmepublic/events.rushme");
         log("App Entered Foreground", "");
 
+
+        /**
+         * Setup for the adapter for the selected dates
+         *
+         * Adapter class stores and displays events based on day selected. List is updated when a new date is selected
+         *
+         * RecyclerView displays the events in the ArrayList. Only renders elements on screen and one above and one below out of screen
+         */
         selectedEvents = new ArrayList<Fraternity.Event>();
         final RecyclerView rv = findViewById(R.id.fraternitiesRV);
 
@@ -111,29 +129,25 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
         adapter.setClickListener(this);
         rv.setAdapter(adapter);
 
+        /**
+         * CalndarView date change listener
+         *
+         * This function passes the newest dates to the adapter to update the recyclerview
+         */
         newCal.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                selectedEvents.clear();
+                selectedEvents.clear(); /* Empty out selected events array */
                 for(int i=0; i<events.size(); ++i){
-
                     CalendarDay temp = new CalendarDay(events.get(i).starting);
-                    if((temp.getDay() == date.getDay()) && (temp.getYear() == date.getYear()) && (temp.getMonth() == date.getMonth())){
+                    if((temp.getDay() == date.getDay()) && (temp.getYear() == date.getYear()) && (temp.getMonth() == date.getMonth())){ /* Makes sure event matches the date selected */
                         selectedEvents.add(events.get(i));
                     }
                 }
-                Log.d("SIZER", Integer.toString(selectedEvents.size()));
-                adapter.updateData(selectedEvents);
+                adapter.updateData(selectedEvents); /* Update Adapter */
             }
         });
 
-//        Button fratList = (Button) findViewById(R.id.fratList);
-//        fratList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                toFratList();
-//            }
-//        });
     }
 
     protected void log(String action, String options) {
@@ -205,48 +219,59 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
         }
     }
 
+    /**
+     * onItemClick is called when a person selects a fraternities event from the selectedEvents RecyclerView
+     * @param view
+     * @param position
+     */
     public void onItemClick(View view, int position) {
-        /*
-        Context context = view.getContext();
-        Intent intent = new Intent(context, FraternityDetail.class);
-        context.startActivity(intent);
-        */
-
-        TextView eventNameTV = view.findViewById(R.id.eventNameTV);
-        TextView fratNameTV =  view.findViewById(R.id.fratNameTV);
         if (position >= 0 && position < selectedEvents.size()) {
-            Fraternity.Event event = selectedEvents.get(position);
-            Log.d("SELECTED", event.frat.getName());
-            startActivityFor(event.frat);
+            Fraternity.Event event = selectedEvents.get(position); /* Grab fraternity based on position clicked */
+            startActivityFor(event.frat); /* call startActivityFor function which loads individual fraternity detail */
         }
-
     }
 
+    /**
+     * Bundles up a fraternity into an Intent with the selected Fraternity. FraternityDetail activity is started with specified intent
+     * @param fraternity
+     */
     private void startActivityFor(Fraternity fraternity) {
         Intent intent = new Intent(this, FraternityDetail.class);
         intent.putExtra("Fraternity", fraternity);
-        Log.d("Moving to new", fraternity.getName());
         startActivity(intent);
     }
 
 
     /**
-     * Json Array from URL
+     * Json Array from URL for fraternities and Events
      */
     private class RemoteContentTask extends AsyncTask<String, String, String> {
 
+        /**
+         * Function called before doInBackground()
+         */
         protected void onPreExecute() {
             super.onPreExecute();
 
+            /**
+             * progress dialog to show events are being found
+             */
             pd = new ProgressDialog(MainActivity.this);
             pd.setMessage("Loading events...");
-            pd.setCancelable(false);
+            pd.setCancelable(false); /* Prevents user from using app while getting events */
             pd.show();
         }
+
+        /**
+         * Gets Fraternity JSON from URL
+         *
+         * @param fromSURL
+         * @return
+         */
         protected String loadFraternities(String fromSURL) {
             String rawGet = "{}";
             try {
-                rawGet = this.get(fromSURL);
+                rawGet = this.get(fromSURL); //Gets JSON from URL with get function
             } catch (Exception e) {
                 Log.e("LoadFraternities", e.getMessage());
             }
@@ -257,6 +282,9 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
                 int length = fraternitiesJSONArray.length();
                 for (int i = 0; i < length; i++) {
                     try {
+                        /**
+                         * Gets values from JSON to create a new Fraternity object
+                         */
                         JSONObject fratJSON = fraternitiesJSONArray.getJSONObject(i);
                         String name = fratJSON.getString("name");
                         String chapter = fratJSON.getString("chapter");
@@ -264,18 +292,22 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
                         String description = fratJSON.getString("description");
                         String key = fratJSON.getString("namekey");
                         Fraternity frat = new Fraternity(name, key, chapter, members, description);
+
+                        /**
+                         * add new fraternity to fraternities and fraternitiesByKey
+                         */
                         fraternities.put(frat.getName(), frat);
                         fraternitiesByKey.put(frat.getKey(), frat);
-                        if(key == "PDP"){
-                            Log.d("PDP FRAT", name);
-                        }
-                    } catch (Exception e) {
+                    } catch (Exception e) { /* Error handling */
                         Log.e("Error Initializing Fraternity " + (i+1), e.getMessage());
                     }
                 }
-                Log.d("Load Fraternities", "Initialized " + fraternities.size() + " fraternities");
+                /* Successful load */
                 return "Success";
             }
+            /**
+             * Error handling
+             */
             catch (JSONException e) {
                 Log.e("Load Fraternities", e.toString());
             } catch (Exception e) {
@@ -284,20 +316,16 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
             return "Failure";
         }
 
+        /**
+         * Get events from JSON by URL
+         *
+         * @param fromSURL
+         * @return
+         */
         protected String loadEvents(String fromSURL) {
-              /*{
-            "description": "This is a Greek wide event hosted by the Interfraternal Council to distribute chapter recruitment calendars and provide information about Greek Life at RPI.",
-            "duration": "03:00",
-            "event_name": "IFC Kickoff",
-            "frat_name_key": "ACA",
-            "start_time": "2018-10-19T16:00",
-            "invite_only": "no",
-            "location":
-            "RPI Union - McNeil Room"}
-            */
             String rawGet = "{}";
             try {
-                rawGet = this.get(fromSURL);
+                rawGet = this.get(fromSURL); // Get method that returns JSON from URL
             } catch (Exception e) {
                 Log.e("LoadFraternities", e.getMessage());
                 return "Failure";
@@ -309,6 +337,9 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
                 int length = eventsJSONArray.length();
                 for (int i = 0; i < length; i++) {
                     try {
+                        /**
+                         * Parse JSON and create new Event object
+                         */
                         JSONObject eventJSON = eventsJSONArray.getJSONObject(i);
                         String name  = eventJSON.getString("event_name");
                         String duration = eventJSON.getString("duration");
@@ -324,22 +355,27 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
                         String inviteOnly = eventJSON.getString("invite_only");
                         String location = eventJSON.getString("location");
                         Fraternity frat = fraternitiesByKey.get(fratKey);
+                        /**
+                         * Some Frats were suspended which caused them to be null when adding to events list
+                         */
                         if(frat != null){
-                            // String name,  String location, Fraternity frat, Date starting, Integer durationInMinutes
                             Fraternity.Event event = new Fraternity.Event(name, location, frat, starting, intDuration);
                             events.add(event);
                         }else {
                             Log.d("NULL FRAT EVENT", " > " +name + " " + fratKey + " Month: " + Integer.toString(starting.getMonth()+1) + " Day: " + Integer.toString(starting.getDay()+1));
                         }
 
-
+                    /* Error Handling */
                     } catch (Exception e) {
                         Log.e("Error Initializing Event " + (i+1), e.getMessage());
                     }
                 }
-                Log.d("Load Events", "Initialized " + events.size() + " events");
+                /* Successful load */
                 return "Success";
             }
+            /**
+             * Error handling
+             */
             catch (JSONException e) {
                 Log.e("Load Events", "JSON Error");
             } catch (Exception e) {
@@ -349,10 +385,22 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
 
         }
 
+        /**
+         * An Asynchronous task runs in the background so this function gets called to get JSON from url overtime
+         *
+         * @param params
+         * @return
+         */
         protected String doInBackground(String... params) {
             return loadFraternities(params[0]) + "\n" + loadEvents(params[1]);
         }
 
+        /**
+         * Takes a URL and returns contents (in our case a JSON object)
+         * @param sURL
+         * @return
+         * @throws Exception
+         */
         String get(String sURL) throws Exception {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
@@ -386,10 +434,18 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
             }
         }
 
+        /**
+         * After doInBackground completes this function is called to wrap up the asynchronous task
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
-            Log.d("Load Events", result);
             super.onPostExecute(result);
+
+            /**
+             * Remove the progress dialog so user regains control of app
+             */
             if (pd.isShowing()){
                 pd.dismiss();
             }
@@ -397,12 +453,17 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
             /* Sort events */
             events.sort(new SortChronologically());
 
+            /**
+             * Campus is a global class that holds all the events and fraternities to make it easier to pass large lists between activities
+             */
             Campus campus = ((Campus) getApplicationContext());
             campus.setEvents(events);
-            /* Labeling event numbers on calendar */
+
+            /**
+             * Labeling event numbers on calendar
+             */
             eventNum = parseEvents(events);
             for(CalendarDay i : eventNum.keySet()){
-                Log.d("EVENTINFO", Integer.toString(i.getMonth()) + "/" +Integer.toString(i.getDay()) + "/" + Integer.toString(i.getYear()));
                 ArrayList<CalendarDay> temp = new ArrayList<CalendarDay>();
                 temp.add(i);
                 newCal.addDecorator(new eventDecorator(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null), temp, eventNum.get(i)));
@@ -411,10 +472,11 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
     }
 
 
-
     /**
-     * Take the event arraylist and convert the dates into an arraymap to see show the total # of events on a certain day
+     * Tally's up all the events based on similar dates and stores them to be displayed on the calendar
      *
+     * @param events
+     * @return
      */
     private ArrayMap<CalendarDay, Integer> parseEvents(ArrayList<Fraternity.Event> events){
         ArrayMap<CalendarDay, Integer> eventNums = new ArrayMap<CalendarDay, Integer>();
@@ -429,11 +491,5 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
             }
         }
         return eventNums;
-    }
-
-
-    private void toFratList(){
-        Intent intent = new Intent(this, FraternityList.class);
-        startActivity(intent);
     }
 }

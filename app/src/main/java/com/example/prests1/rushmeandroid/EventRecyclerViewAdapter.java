@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * EventRecyclerViewAdapter is the backend of the RecyclerView for the events selected on a day.
+ *
+ * Stores events and sets up listenders when fraternities are selected
+ */
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
     private List<Fraternity.Event> mData;
