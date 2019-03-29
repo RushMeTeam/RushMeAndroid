@@ -11,6 +11,26 @@ None yet!
 # Supported Platforms
 RushMe Android supports Android 9 (API level 28) and beyond, and is tested on the Nexus 5.
 
+# Classes 
+RushMeAndroid/app/src/main/java/com/example/prests1/rushmeandroid/
+  ActionLogging.java
+  Campus.java
+  CustomSpan.java
+  EventRecyclerViewAdapter.java
+  Fraternity.java
+  FraternityDetail.java
+  MainActivity.java
+  eventDecorator.java
+RushMeAndroid/app/src/androidTest/java/com/example/prests1/rushmeandroid/
+  ExampleInstrumentedTest.java
+RushMeAndroid/app/src/test/java/com/example/prests1/rushmeandroid/
+  ExampleUnitTest.java
+
+# To-Do
+Sidebar
+Splash Screen
+Ability to Favorite Fraternites
+
 # Contribute to RushMe
 The team welcomes contributions to RushMe. To contribute fork the repository, make (and document!) some changes and submit a pull request for us to look over. Approved changes will be included in the next release.
 
