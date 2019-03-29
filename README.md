@@ -22,15 +22,15 @@ RushMeAndroid/app/src/main/java/com/example/prests1/rushmeandroid/
   
   EventRecyclerViewAdapter.java
   
-  Fraternity.java
+  Fraternity.java - Creates Fraternity Object (consisting of name, chapter, memberCount, desc, and key), Event Object, and other related functions.
   
-  FraternityDetail.java
+  FraternityDetail.java - Creates the page that lists fraternity details (name, chapter, description, and member count)
   
   MainActivity.java
   
   eventDecorator.java
   
-  SplashActivity.java
+  SplashActivity.java - Creates the Splash Screen
   
 RushMeAndroid/app/src/androidTest/java/com/example/prests1/rushmeandroid/
 
