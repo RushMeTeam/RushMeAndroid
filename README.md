@@ -12,33 +12,19 @@ None yet!
 RushMe Android supports Android 9 (API level 28) and beyond, and is tested on the Nexus 5.
 
 # Classes 
-RushMeAndroid/app/src/main/java/com/example/prests1/rushmeandroid/
-
-  ActionLogging.java
-  
-  Campus.java
-  
-  CustomSpan.java
-  
-  EventRecyclerViewAdapter.java
-  
-  Fraternity.java - Creates Fraternity Object (consisting of name, chapter, memberCount, desc, and key), Event Object, and other related functions.
-  
-  FraternityDetail.java - Creates the page that lists fraternity details (name, chapter, description, and member count)
-  
-  MainActivity.java
-  
-  eventDecorator.java
-  
-  SplashActivity.java - Creates the Splash Screen
-  
-RushMeAndroid/app/src/androidTest/java/com/example/prests1/rushmeandroid/
-
-  ExampleInstrumentedTest.java
-  
-RushMeAndroid/app/src/test/java/com/example/prests1/rushmeandroid/
-
-  ExampleUnitTest.java
+|Class Name|Path|Description|
+|:-:|:-:|:-:|
+|ActionLogging.java|RushMeAndroid/app/src/main/java/com/example/prests1/rushmeandroid/|   |
+|Campus.java|   |   |
+|CustomSpan.java|   |   |
+|EventRecyclerViewAdapter.java|   |   |
+|Fraternity.java|   |Creates Fraternity Object, Event Object, and other related functions.|
+|FraternityDetail.java|   |Creates the page that lists fraternity details.|
+|MainActivity.java|   |   |
+|eventDecorator.java|   |   |
+|SplashActivity.java|   |Creates the Splash Screen|
+|ExampleInstrumentedTest.java|RushMeAndroid/app/src/androidTest/java/com/example/prests1/rushmeandroid/| |
+|ExampleUnitTest.java|RushMeAndroid/app/src/test/java/com/example/prests1/rushmeandroid/| |
 
 # To-Do
 Searchbar
