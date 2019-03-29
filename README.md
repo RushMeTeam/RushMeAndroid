@@ -13,22 +13,36 @@ RushMe Android supports Android 9 (API level 28) and beyond, and is tested on th
 
 # Classes 
 RushMeAndroid/app/src/main/java/com/example/prests1/rushmeandroid/
+
   ActionLogging.java
+  
   Campus.java
+  
   CustomSpan.java
+  
   EventRecyclerViewAdapter.java
+  
   Fraternity.java
+  
   FraternityDetail.java
+  
   MainActivity.java
+  
   eventDecorator.java
+  
 RushMeAndroid/app/src/androidTest/java/com/example/prests1/rushmeandroid/
+
   ExampleInstrumentedTest.java
+  
 RushMeAndroid/app/src/test/java/com/example/prests1/rushmeandroid/
+
   ExampleUnitTest.java
 
 # To-Do
 Sidebar
+
 Splash Screen
+
 Ability to Favorite Fraternites
 
 # Contribute to RushMe
