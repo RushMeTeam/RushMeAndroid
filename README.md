@@ -30,6 +30,8 @@ RushMeAndroid/app/src/main/java/com/example/prests1/rushmeandroid/
   
   eventDecorator.java
   
+  SplashActivity.java
+  
 RushMeAndroid/app/src/androidTest/java/com/example/prests1/rushmeandroid/
 
   ExampleInstrumentedTest.java
@@ -39,11 +41,17 @@ RushMeAndroid/app/src/test/java/com/example/prests1/rushmeandroid/
   ExampleUnitTest.java
 
 # To-Do
-Sidebar
+Searchbar
 
-Splash Screen
+Top Sidebar
+
+Left Sidebar
 
 Ability to Favorite Fraternites
+
+Map View in Fraternity Details
+
+Settings
 
 # Contribute to RushMe
 The team welcomes contributions to RushMe. To contribute fork the repository, make (and document!) some changes and submit a pull request for us to look over. Approved changes will be included in the next release.
