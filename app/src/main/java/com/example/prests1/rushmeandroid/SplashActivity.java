@@ -9,13 +9,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-/**
- * Created by Sumeet Jain on 23-06-2018.
- */
-
+// This class creates the Splash Screen and runs it with a small animation.
 public class SplashActivity extends AppCompatActivity {
 
     private ImageView logo;
+    // The amount of time to delay the Splash Screen
     private static int splashTimeOut=5000;
 
     @Override
@@ -33,6 +31,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         },splashTimeOut);
 
+        // Loads in the animation
         Animation myanim = AnimationUtils.loadAnimation(this,R.anim.appsplashanimation);
         logo.startAnimation(myanim);
     }
