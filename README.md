@@ -6,7 +6,7 @@ Users of the iOS and Android Apps can see fraternity profiles, get directions to
 RushMe has been implemented successfully at Rensselaer Polytechnic Institute. The platform can easily be implemented elsewhere, requiring only fraternity participation, at no cost--now, or in the future. Feel free to contact us if your school is interested.
 
 # Screenshots
-<img src="https://github.com/RushMeTeam/RushMeAndroid/blob/master/Screenshot1.png" width="200"> <img src="https://github.com/RushMeTeam/RushMeAndroid/blob/master/Screenshot2.png" width="200">
+<img src="https://github.com/RushMeTeam/RushMeAndroid/blob/master/screenshots/Nexus5X_CalendarDetails.png" width="200"> <img src="https://github.com/RushMeTeam/RushMeAndroid/blob/master/screenshots/Nexus5X_FraternityDetails.png" width="200">
 
 # Supported Platforms
 RushMe Android supports Android 9 (API level 28) and beyond, and is tested on the Nexus 5.
