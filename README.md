@@ -14,17 +14,17 @@ RushMe Android supports Android 9 (API level 28) and beyond, and is tested on th
 # Classes 
 |Class Name|Path|Description|
 |:-:|:-:|:-:|
-|ActionLogging.java|RushMeAndroid/app/src/main/java/com/example/prests1/rushmeandroid/|   |
-|Campus.java|   |   |
-|CustomSpan.java|   |   |
-|EventRecyclerViewAdapter.java|   |   |
-|Fraternity.java|   |Creates Fraternity Object, Event Object, and other related functions.|
-|FraternityDetail.java|   |Creates the page that lists fraternity details.|
-|MainActivity.java|   |   |
-|eventDecorator.java|   |   |
-|SplashActivity.java|   |Creates the Splash Screen|
-|ExampleInstrumentedTest.java|RushMeAndroid/app/src/androidTest/java/com/example/prests1/rushmeandroid/| |
-|ExampleUnitTest.java|RushMeAndroid/app/src/test/java/com/example/prests1/rushmeandroid/| |
+|ActionLogging.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Checks if a fraternity was selected and checks if the app is in the foreground or background|
+|Campus.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the Campus object which holds all events and fraternities.|
+|CustomSpan.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
+|EventRecyclerViewAdapter.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
+|Fraternity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates Fraternity Object, Event Object, and other related functions.|
+|FraternityDetail.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the page that lists fraternity details.|
+|MainActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
+|eventDecorator.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
+|SplashActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates and animates the Splash Screen|
+|ExampleInstrumentedTest.java|RushMeAndroid\app\src\androidTest\java\com\example\prests1\rushmeandroid| |
+|ExampleUnitTest.java|RushMeAndroid\app\src\test\java\com\example\prests1\rushmeandroid| |
 
 # To-Do
 Searchbar
