@@ -14,24 +14,22 @@ RushMe Android supports Android 9 (API level 28) and beyond, and is tested on th
 # Classes 
 |Class Name|Path|Description|
 |:-:|:-:|:-:|
-|ActionLogging.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Checks if a fraternity was selected and checks if the app is in the foreground or background|
+|ActionLogging.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Checks if a fraternity was selected and checks if the app is in the foreground or background.|
 |Campus.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the Campus object which holds all events and fraternities.|
-|CustomSpan.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
-|EventRecyclerViewAdapter.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
+|CustomSpan.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Initializes daily number of events text.|
+|EventRecyclerViewAdapter.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Checks for fraternities that are selected and stores events.|
 |Fraternity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates Fraternity Object, Event Object, and other related functions.|
 |FraternityDetail.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the page that lists fraternity details.|
-|MainActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
-|eventDecorator.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|   |
-|SplashActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates and animates the Splash Screen|
-|ExampleInstrumentedTest.java|RushMeAndroid\app\src\androidTest\java\com\example\prests1\rushmeandroid| |
-|ExampleUnitTest.java|RushMeAndroid\app\src\test\java\com\example\prests1\rushmeandroid| |
+|MainActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|The starting activity that executes most of the necessary code.|
+|eventDecorator.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Displays the number of events for specific dates.|
+|SplashActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates and animates the Splash Screen.|
+|ExampleInstrumentedTest.java|RushMeAndroid\app\src\androidTest\java\com\example\prests1\rushmeandroid|Instrumented test, which will execute on an Android device.|
+|ExampleUnitTest.java|RushMeAndroid\app\src\test\java\com\example\prests1\rushmeandroid|Example local unit test, which will execute on the development machine (host).|
 
 # To-Do
+Navigation Drawer
+
 Searchbar
-
-Top Sidebar
-
-Left Sidebar
 
 Ability to Favorite Fraternites
 
