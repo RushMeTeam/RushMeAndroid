@@ -14,7 +14,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private ImageView logo;
     // The amount of time to delay the Splash Screen
-    private static int splashTimeOut=5000;
+    // Note: Match the value in anim/appsplashanimation.xml as well
+    private static int splashTimeOut=1000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

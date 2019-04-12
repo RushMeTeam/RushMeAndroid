@@ -17,6 +17,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -151,6 +154,27 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
             }
         });
 
+    }
+
+    // Creates the Menu Bar and its items
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_items, menu);
+        return true;
+    }
+
+    // Gives the Menu Bar items some actions to perform
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Checks for an item on the menu being selected
+        switch (item.getItemId()) {
+            case R.id.item1:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
