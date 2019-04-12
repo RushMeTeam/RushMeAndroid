@@ -22,20 +22,23 @@ RushMe Android supports Android 9 (API level 28) and beyond, and is tested on th
 |FraternityDetail.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the page that lists fraternity details.|
 |MainActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|The starting activity that executes most of the necessary code.|
 |eventDecorator.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Displays the number of events for specific dates.|
+|SettingsActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the settings page.|
 |SplashActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates and animates the Splash Screen.|
 |ExampleInstrumentedTest.java|RushMeAndroid\app\src\androidTest\java\com\example\prests1\rushmeandroid|Instrumented test, which will execute on an Android device.|
 |ExampleUnitTest.java|RushMeAndroid\app\src\test\java\com\example\prests1\rushmeandroid|Example local unit test, which will execute on the development machine (host).|
 
 # To-Do
-Navigation Drawer
+Settings Page
+- Data Analytics
+- Shuffle Fraternities
+- Display past events
+- Display Version/Build Number
 
-Searchbar
+Ability to favorite Fraternites
 
-Ability to Favorite Fraternites
+Searchbar for Fraternity names
 
-Map View in Fraternity Details
-
-Settings
+Map View in Fraternity details
 
 # Contribute to RushMe
 The team welcomes contributions to RushMe. To contribute fork the repository, make (and document!) some changes and submit a pull request for us to look over. Approved changes will be included in the next release.
