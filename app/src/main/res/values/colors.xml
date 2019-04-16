@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="RedAccent">#EB2E27</color>
     <color name="RushMePrimary">#25a7df</color>
+    <color name="black">#000000</color>
 </resources>

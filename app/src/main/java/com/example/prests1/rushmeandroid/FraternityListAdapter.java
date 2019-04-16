@@ -7,33 +7,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-/**
- * EventRecyclerViewAdapter is the backend of the RecyclerView for the events selected on a day.
- *
- * Stores events and sets up listenders when fraternities are selected
- */
-public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
-
-    private List<Fraternity.Event> mData;
+public class FraternityListAdapter extends RecyclerView.Adapter<FraternityListAdapter.ViewHolder> {
+    //private HashMap<String, Fraternity> mData;
+    private ArrayList<Fraternity> mData;
     private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
+    private EventRecyclerViewAdapter.ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    EventRecyclerViewAdapter(Context context, List<Fraternity.Event> data) {
+    FraternityListAdapter(Context context, ArrayList<Fraternity> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
 
-    public void updateData(ArrayList<Fraternity.Event> events) {
-        mData = new ArrayList<Fraternity.Event>();
+    public void updateData(ArrayList<Fraternity> frats) {
+        mData = new ArrayList<Fraternity>();
         mData.clear();
-        mData.addAll(events);
+
+        /*
+        for (Map.Entry<String, Fraternity> frat : frats.entrySet()) {
+            mData.put(frat.getKey(), frat.getValue());
+        }
+        */
+        mData.addAll(frats);
         this.notifyDataSetChanged();
     }
 
@@ -47,14 +48,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Fraternity.Event event = mData.get(position);
-        holder.fratNameTV.setText(event.frat.getName().toUpperCase() + " | " + event.location);
-        holder.eventNameTV.setText(event.name);
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-        String strOut = (df.format("MM.dd.yy h:mm a", event.starting)).toString();
-        strOut += " - " + (df.format("h:mm a", event.ending)).toString();
-        holder.infoTV.setText(strOut);
-
+        Fraternity frat = mData.get(position);
+        holder.FraternityNameTV.setText(frat.getName().toUpperCase());
     }
 
     // total number of rows
@@ -66,31 +61,28 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView fratNameTV;
-        TextView eventNameTV;
-        TextView infoTV;
+        TextView FraternityNameTV;
 
         ViewHolder(View itemView) {
             super(itemView);
-            eventNameTV = itemView.findViewById(R.id.eventNameTV);
-            fratNameTV = itemView.findViewById(R.id.fratNameTV);
-            infoTV = itemView.findViewById(R.id.infoTV);
+            FraternityNameTV = itemView.findViewById(R.id.FraternityNameTV);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+
         }
     }
 
     // convenience method for getting data at click position
     String getItem(int id) {
-        return mData.get(id).name;
+        return mData.get(id).getName();
     }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    void setClickListener(EventRecyclerViewAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
