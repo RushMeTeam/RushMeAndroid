@@ -9,7 +9,9 @@ RushMe has been implemented successfully at Rensselaer Polytechnic Institute. Th
 <img src="https://github.com/RushMeTeam/RushMeAndroid/blob/master/screenshots/Nexus5X_CalendarDetails.png" width="200"> <img src="https://github.com/RushMeTeam/RushMeAndroid/blob/master/screenshots/Nexus5X_FraternityDetails.png" width="200">
 
 # Supported Platforms
-RushMe Android supports Android 9 (API level 28) and beyond, and is tested on the Nexus 5.
+RushMe Android supports Android 4.4 (API level 19) and beyond, and is tested on the Nexus 5.
+
+Reccomended Android 9.0 (API level 28) and beyond for maximum functionality.
 
 # Classes 
 |Class Name|Path|Description|
@@ -22,7 +24,7 @@ RushMe Android supports Android 9 (API level 28) and beyond, and is tested on th
 |FraternityDetail.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the page that lists fraternity details.|
 |MainActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|The starting activity that executes most of the necessary code.|
 |eventDecorator.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Displays the number of events for specific dates.|
-|SettingsActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the settings page.|
+|SettingsActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates the settings page and displays Version/Build numbers.|
 |SplashActivity.java|RushMeAndroid\app\src\main\java\com\example\prests1\rushmeandroid|Creates and animates the Splash Screen.|
 |ExampleInstrumentedTest.java|RushMeAndroid\app\src\androidTest\java\com\example\prests1\rushmeandroid|Instrumented test, which will execute on an Android device.|
 |ExampleUnitTest.java|RushMeAndroid\app\src\test\java\com\example\prests1\rushmeandroid|Example local unit test, which will execute on the development machine (host).|
@@ -34,11 +36,15 @@ Settings Page
 - Display past events
 - Display Version/Build Number
 
+List of Fraternities
+
 Ability to favorite Fraternites
 
 Searchbar for Fraternity names
 
 Map View in Fraternity details
+
+Tablet Support
 
 # Contribute to RushMe
 The team welcomes contributions to RushMe. To contribute fork the repository, make (and document!) some changes and submit a pull request for us to look over. Approved changes will be included in the next release.
