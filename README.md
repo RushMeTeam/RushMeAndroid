@@ -34,7 +34,6 @@ Settings Page
 - Data Analytics
 - Shuffle Fraternities
 - Display past events
-- Display Version/Build Number
 
 List of Fraternities
 
