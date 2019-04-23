@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
     private ArrayMap<CalendarDay, Integer> eventNum; /* Number of events for each calendar day stored in an iterable hash table */
     MaterialCalendarView newCal; /* Calendar reference to Main Activity XML */
     EventRecyclerViewAdapter adapter; /* Adapter for recycler view of selected day's events */
-
     ActionLogging logger = new ActionLogging(); /* User Action logging for data */
 
     /**
