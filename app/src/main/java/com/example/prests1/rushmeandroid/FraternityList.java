@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FraternityList extends AppCompatActivity {
+public class FraternityList extends AppCompatActivity implements FraternityListAdapter.ItemClickListener {
 
     HashMap<String, Fraternity> fraternities = new HashMap<String, Fraternity>();
     FraternityListAdapter adapter;
