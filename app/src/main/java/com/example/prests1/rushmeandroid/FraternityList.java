@@ -29,9 +29,11 @@ public class FraternityList extends AppCompatActivity {
         for (Map.Entry<String, Fraternity> frat : fraternities.entrySet()) {
             frats.add(frat.getValue());
         }
+
         final RecyclerView rv = findViewById(R.id.fraternitiesList);
         rv.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FraternityListAdapter(this, frats);
+        adapter.setClickListener(this);
         rv.setAdapter(adapter);
     }
 

@@ -17,7 +17,7 @@ public class FraternityListAdapter extends RecyclerView.Adapter<FraternityListAd
     //private HashMap<String, Fraternity> mData;
     private ArrayList<Fraternity> mData;
     private LayoutInflater mInflater;
-    private EventRecyclerViewAdapter.ItemClickListener mClickListener;
+    private FraternityListAdapter.ItemClickListener mClickListener;
 
     // data is passed into the constructor
     FraternityListAdapter(Context context, ArrayList<Fraternity> data) {
@@ -82,7 +82,7 @@ public class FraternityListAdapter extends RecyclerView.Adapter<FraternityListAd
     }
 
     // allows clicks events to be caught
-    void setClickListener(EventRecyclerViewAdapter.ItemClickListener itemClickListener) {
+    void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
