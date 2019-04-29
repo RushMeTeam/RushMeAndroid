@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements EventRecyclerView
         ActionLogging.Log("App Background", "");
     }
 
+
     /**
      * Called when the application goes to the foreground
      */
